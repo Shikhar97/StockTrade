@@ -16,7 +16,7 @@ class UpdateStock:
         output = self.db.run_query(get_query)
         for stock_name, stock_price in output:
             update_query = "UPDATE stocks SET stock_price=%s WHERE stock_name=%s"
-            self.db.run_query(update_query,(self.get_price(stock_price), stock_name))
+            self.db.run_query(update_query, self.get_price(stock_price), stock_name)
             if "UPDATE 0 1" not in self.db.cursor.statusmessage:
                 print("not working")
 

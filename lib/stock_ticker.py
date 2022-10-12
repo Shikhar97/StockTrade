@@ -13,3 +13,5 @@ class StockList:
     def initialize_db(self):
         for stock in self.symbol_list_us:
             self.db.run_query("INSERT INTO stocks VALUES (%s, %s)", stock["symbol"], stock["longName"])
+            if "INSERT 0 1" not in self.db.cursor.statusmessage:
+                print("Cannot insert")

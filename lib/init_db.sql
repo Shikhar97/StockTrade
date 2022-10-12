@@ -78,3 +78,21 @@ CREATE TABLE pending_orders (
       FOREIGN KEY(user_id)
 	  REFERENCES users(id)
 );
+
+-- Creating Triggers
+CREATE OR REPLACE FUNCTION init_user() RETURNS TRIGGER AS $$
+DECLARE
+BEGIN
+    INSERT INTO
+        user_portfolio(user_id)
+        VALUES(new.id);
+
+           RETURN new;
+END;
+$$
+language plpgsql;
+
+CREATE OR REPLACE TRIGGER user_data AFTER INSERT
+    ON users
+    FOR EACH ROW
+    EXECUTE PROCEDURE init_user();
