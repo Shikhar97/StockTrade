@@ -24,7 +24,7 @@ def home():
         # return render_template('home.html', username=session['username'])
         return render_template("home.html",rows=rows)
         # return "<h2>Home<h2/>"
-    return render_template("rough.html")
+    return render_template("base.html")
     # return "<h2>Home<h2/>"
 
 
