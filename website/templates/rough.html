@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Home</title>
+    <style>
+        /* Color of the links BEFORE scroll */
+.navbar-scroll .nav-link,
+.navbar-scroll .navbar-toggler-icon,
+.navbar-scroll .navbar-brand {
+  color: #262626;
+}
+
+/* Color of the navbar BEFORE scroll */
+.navbar-scroll {
+  background-color: #b9ae8f;
+}
+
+/* Color of the links AFTER scroll */
+.navbar-scrolled .nav-link,
+.navbar-scrolled .navbar-toggler-icon,
+.navbar-scroll .navbar-brand {
+  color: #262626;
+}
+
+/* Color of the navbar AFTER scroll */
+.navbar-scrolled {
+  background-color: rgb(150, 85, 85);
+}
+
+/* An optional height of the navbar AFTER scroll */
+.navbar.navbar-scroll.navbar-scrolled {
+  padding-top: auto;
+  padding-bottom: auto;
+}
+.navbar-brand {
+  font-size: unset;
+  height: 3.5rem;
+}
+    </style>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+      crossorigin="anonymous"
+    />
+  </head>
+  
+  <body>
+    <!-- <section class="intro">
+        <div class="bg-image h-100" style="background-color: #f5f7fa;">
+          <div class="mask d-flex align-items-center h-100">
+            <div class="container">
+              <div class="row justify-content-center">
+                <div class="col-12">
+                  <div class="card">
+                    <div class="card-body p-0">
+                      <div class="table-responsive table-scroll" data-mdb-perfect-scrollbar="true" style="position: relative; height: 700px">
+                        <table class="table table-striped mb-0">
+                          <thead style="background-color: #305ea1;">
+                            <tr>
+                              <th scope="col">Class name</th>
+                              <th scope="col">Type</th>
+                              <th scope="col">Hours</th>
+                              <th scope="col">Trainer</th>
+                              <th scope="col">Spots</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>Like a butterfly</td>
+                              <td>Boxing</td>
+                              <td>9:00 AM - 11:00 AM</td>
+                              <td>Aaron Chapman</td>
+                              <td>10</td>
+                            </tr>
+                            <tr>
+                              <td>Mind &amp; Body</td>
+                              <td>Yoga</td>
+                              <td>8:00 AM - 9:00 AM</td>
+                              <td>Adam Stewart</td>
+                              <td>15</td>
+                            </tr>
+                            <tr>
+                              <td>Crit Cardio</td>
+                              <td>Gym</td>
+                              <td>9:00 AM - 10:00 AM</td>
+                              <td>Aaron Chapman</td>
+                              <td>10</td>
+                            </tr>
+                            <tr>
+                              <td>Wheel Pose Full Posture</td>
+                              <td>Yoga</td>
+                              <td>7:00 AM - 8:30 AM</td>
+                              <td>Donna Wilson</td>
+                              <td>15</td>
+                            </tr>
+                            <tr>
+                              <td>Playful Dancer's Flow</td>
+                              <td>Yoga</td>
+                              <td>8:00 AM - 9:00 AM</td>
+                              <td>Donna Wilson</td>
+                              <td>10</td>
+                            </tr>
+                            <tr>
+                              <td>Zumba Dance</td>
+                              <td>Dance</td>
+                              <td>5:00 PM - 7:00 PM</td>
+                              <td>Donna Wilson</td>
+                              <td>20</td>
+                            </tr>
+                            <tr>
+                              <td>Cardio Blast</td>
+                              <td>Gym</td>
+                              <td>5:00 PM - 7:00 PM</td>
+                              <td>Randy Porter</td>
+                              <td>10</td>
+                            </tr>
+                            <tr>
+                              <td>Pilates Reformer</td>
+                              <td>Gym</td>
+                              <td>8:00 AM - 9:00 AM</td>
+                              <td>Randy Porter</td>
+                              <td>10</td>
+                            </tr>
+                            <tr>
+                              <td>Supple Spine and Shoulders</td>
+                              <td>Yoga</td>
+                              <td>6:30 AM - 8:00 AM</td>
+                              <td>Randy Porter</td>
+                              <td>15</td>
+                            </tr>
+                            <tr>
+                              <td>Yoga for Divas</td>
+                              <td>Yoga</td>
+                              <td>9:00 AM - 11:00 AM</td>
+                              <td>Donna Wilson</td>
+                              <td>20</td>
+                            </tr>
+                            <tr>
+                              <td>Virtual Cycle</td>
+                              <td>Gym</td>
+                              <td>8:00 AM - 9:00 AM</td>
+                              <td>Randy Porter</td>
+                              <td>20</td>
+                            </tr>
+                            <tr>
+                              <td>Like a butterfly</td>
+                              <td>Boxing</td>
+                              <td>9:00 AM - 11:00 AM</td>
+                              <td>Aaron Chapman</td>
+                              <td>10</td>
+                            </tr>
+                            <tr>
+                              <td>Mind &amp; Body</td>
+                              <td>Yoga</td>
+                              <td>8:00 AM - 9:00 AM</td>
+                              <td>Adam Stewart</td>
+                              <td>15</td>
+                            </tr>
+                            <tr>
+                              <td>Crit Cardio</td>
+                              <td>Gym</td>
+                              <td>9:00 AM - 10:00 AM</td>
+                              <td>Aaron Chapman</td>
+                              <td>10</td>
+                            </tr>
+                            <tr>
+                              <td>Wheel Pose Full Posture</td>
+                              <td>Yoga</td>
+                              <td>7:00 AM - 8:30 AM</td>
+                              <td>Donna Wilson</td>
+                              <td>15</td>
+                            </tr>
+                            <tr>
+                              <td>Playful Dancer's Flow</td>
+                              <td>Yoga</td>
+                              <td>8:00 AM - 9:00 AM</td>
+                              <td>Donna Wilson</td>
+                              <td>10</td>
+                            </tr>
+                            <tr>
+                              <td>Zumba Dance</td>
+                              <td>Dance</td>
+                              <td>5:00 PM - 7:00 PM</td>
+                              <td>Donna Wilson</td>
+                              <td>20</td>
+                            </tr>
+                            <tr>
+                              <td>Cardio Blast</td>
+                              <td>Gym</td>
+                              <td>5:00 PM - 7:00 PM</td>
+                              <td>Randy Porter</td>
+                              <td>10</td>
+                            </tr>
+                            <tr>
+                              <td>Pilates Reformer</td>
+                              <td>Gym</td>
+                              <td>8:00 AM - 9:00 AM</td>
+                              <td>Randy Porter</td>
+                              <td>10</td>
+                            </tr>
+                            <tr>
+                              <td>Supple Spine and Shoulders</td>
+                              <td>Yoga</td>
+                              <td>6:30 AM - 8:00 AM</td>
+                              <td>Randy Porter</td>
+                              <td>15</td>
+                            </tr>
+                            <tr>
+                              <td>Yoga for Divas</td>
+                              <td>Yoga</td>
+                              <td>9:00 AM - 11:00 AM</td>
+                              <td>Donna Wilson</td>
+                              <td>20</td>
+                            </tr>
+                            <tr>
+                              <td>Virtual Cycle</td>
+                              <td>Gym</td>
+                              <td>8:00 AM - 9:00 AM</td>
+                              <td>Randy Porter</td>
+                              <td>20</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section> -->
+      <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-scroll fixed-top shadow-0 border-bottom border-dark">
+    <div class="container">
+      <!-- <a class="navbar-brand" href="#!">STOCK TRADE</a> -->
+      <a class="nav-link font-weight-bold" href="#!">STOCK TRADE</a>
+      <!-- <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+        data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <i class="fas fa-bars"></i>
+      </button> -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#!">Our Story</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#!">Membership</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#!">Write</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#!">Sign In</a>
+          </li>
+          <button type="button" class="btn btn-dark ms-3">Get Started</button>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Navbar -->
+  
+  <div class="d-flex align-items-center justify-content-center text-center" style="height: 1100px;">
+    <p class="h3">Scroll down to see the effect of change the navbar background-color</p>
+  </div>
+  </body>
