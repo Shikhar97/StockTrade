@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Home {% endblock %}
+{% block content %}
+<h1>This is the home  page</h1>
+
+<div class="container" id="topdiv6">
+    
+    {% if rows %}
+            <div class="row" id="index0">
+                {% for row in rows %}
+                    <div class="card needspace mx-3 my-3 mb-3" style="width: 18rem;">                        
+                        <div class="card-body">
+                            <h5 class="card-title">{{row.stock_name}}</h5>
+                            <p class="card-text">{{row.stock_price}}</p>
+                        </div>
+                         
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+</div>
+{% endblock %}
