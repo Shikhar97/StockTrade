@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS admin_users CASCADE;
 DROP TABLE IF EXISTS transaction_his CASCADE;
 DROP TABLE IF EXISTS user_portfolio CASCADE;
 
-DROP TRIGGER user_data;
+DROP TRIGGER IF EXISTS user_data on users;
 
 CREATE TABLE stocks (
     id SERIAL,
@@ -94,7 +94,7 @@ END;
 $BODY$
 language plpgsql;
 
-CREATE OR REPLACE TRIGGER user_data AFTER INSERT
+CREATE TRIGGER user_data AFTER INSERT
     ON users
     FOR EACH ROW
     EXECUTE PROCEDURE init_user();
