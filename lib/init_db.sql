@@ -1,9 +1,11 @@
+DROP TABLE IF EXISTS pending_orders CASCADE;
 DROP TABLE IF EXISTS stocks;
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS admin_users;
-DROP TABLE IF EXISTS transaction_his;
-DROP TABLE IF EXISTS pending_orders;
-DROP TABLE IF EXISTS user_portfolio;
+DROP TABLE IF EXISTS users CASCADE ;
+DROP TABLE IF EXISTS admin_users CASCADE;
+DROP TABLE IF EXISTS transaction_his CASCADE;
+DROP TABLE IF EXISTS user_portfolio CASCADE;
+
+DROP TRIGGER IF EXISTS user_data on users;
 
 CREATE TABLE stocks (
     id SERIAL,
@@ -39,8 +41,8 @@ CREATE TABLE admin_users (
 
 CREATE TABLE transaction_his (
     order_id SERIAL,
-    stock_id VARCHAR NOT NULL,
-    user_id VARCHAR NOT NULL,
+    stock_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
     trans_type VARCHAR NOT NULL,
     quantity INTEGER NOT NULL,
     price FLOAT NOT NULL ,
@@ -65,8 +67,8 @@ CREATE TABLE user_portfolio (
 
 CREATE TABLE pending_orders (
     order_id SERIAL PRIMARY KEY,
-    stock_id VARCHAR NOT NULL,
-    user_id VARCHAR NOT NULL,
+    stock_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
     trans_type VARCHAR NOT NULL,
     quantity INTEGER NOT NULL,
     limit_price FLOAT NOT NULL ,
@@ -78,3 +80,21 @@ CREATE TABLE pending_orders (
       FOREIGN KEY(user_id)
 	  REFERENCES users(id)
 );
+
+-- Creating Triggers
+CREATE OR REPLACE FUNCTION init_user() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    INSERT INTO
+        user_portfolio(user_id)
+        VALUES(new.id);
+
+           RETURN new;
+END;
+$BODY$
+language plpgsql;
+
+CREATE TRIGGER user_data AFTER INSERT
+    ON users
+    FOR EACH ROW
+    EXECUTE PROCEDURE init_user();

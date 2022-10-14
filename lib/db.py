@@ -29,8 +29,8 @@ class DB:
             print("Error while connecting to PostgreSQL", error)
             return None
 
-    def run_query(self, query, **kwargs):
-        self.cursor.execute(query, kwargs)
+    def run_query(self, query, *args):
+        self.cursor.execute(query, args)
         try:
             return self.cursor.fetchall()
         except Exception as e:
