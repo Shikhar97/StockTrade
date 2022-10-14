@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Admin Home Page</title>
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="../static/styles.css">
+	<script type="text/javascript" src="../static/index.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+		<!-- <p>hiii</p> -->
+		<nav class="navbar navbar-light bg-light mb-3">			
+			<a class="btn btn-outline-info my-2 my-sm-0" href="{{url_for('auth.logout')}}">Logout</a>
+		</nav>
+        <div class="container" id="topdiv4">
+		{% if message %}
+			<div class="alert alert-success" role="alert">
+				{{ message }}
+			</div>
+		{% endif %}
+		
+		<div class="card w-75 mb-3 my-3" id="topdiv2">
+			<form class="card-body" action="{{ url_for('views.adminhome') }}" method="POST" enctype="multipart/form-data">
+				<h5 class="card-title">Add New Stock</h5>
+				
+	  			<div class="form-group">
+	    			<label for="category">Stock Name</label>
+	    			<input type="text" class="form-control" name="stock_name" id="stock_name" required>
+	  			</div>
+	  		
+	  			<div class="form-group">
+	    			<label for="category">Price</label>
+	    			<input type="text" class="form-control" name="stock_price" id="stock_price">
+	  			</div>	  			
+	  			
+	  			<button type="submit" class="btn btn-primary">Add</button>
+			</form>
+		</div>
+
+
+        <div class="container" id="topdiv3">
+    
+            {% if rows %}
+                    <div class="row" id="index0">
+                        {% for row in rows %}
+                            <div class="card needspace mx-3 my-3 mb-3" style="width: 18rem;">                        
+                                <div class="card-body">
+                                    <h5 class="card-title">{{row.stock_name}}</h5>
+                                    <p class="card-text">{{row.stock_price}}</p>
+                                </div>
+                                <a href="{{ url_for('views.edit', stock_id=row.stock_id) }}" class="card-link">Edit Product</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+        </div>
+
+       
+
+    </div>
+    </body>
+    </html>
+		
