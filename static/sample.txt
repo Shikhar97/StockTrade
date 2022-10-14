@@ -1,3 +1,0 @@
-the static folder is used to serve files as it is. 
-if you to http://127.0.0.1:5000/static/sample.txt you will see your file if present
-if you go to http://127.0.0.1:5000/static - 404 not found coz you dont want user to access your personal static server files
