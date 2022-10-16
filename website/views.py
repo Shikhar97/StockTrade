@@ -23,8 +23,9 @@ def home():
         rows = cursor.fetchall()
         # return render_template('home.html', username=session['username'])
         return render_template("home.html",rows=rows)
-        # return "<h2>Home<h2/>"
-    return render_template("base.html")
+        # return render_template("rough.html")
+    # return render_template("b.html")
+    return redirect(url_for('auth.login'))
     # return "<h2>Home<h2/>"
 
 
@@ -51,23 +52,7 @@ def adminhome():
     else:
         return render_template("home.html")
 
-    # User is not loggedin redirect to login page
-    # return redirect(url_for('auth.login'))   
-    
-    # rows = Stocks.query.all()
-    # if request.method == "POST":
-    #     name = request.form.get("stock_name")
-    #     price = request.form.get("stock_price")
-    #     stock = Stocks(stock_name=name,stock_price=price)
-    #     db.session.add(stock)	
-    #     db.session.commit()
-    #     rows = Stocks.query.all()
-
-         
-    #     return render_template("admin_home.html",  message="Product added", user=current_user, rows=rows)
-    # return render_template("home.html") 
-
-
+  
 
 
 #when edit product option is selected this function is loaded
@@ -92,23 +77,28 @@ def edit(stock_id):
             cursor.execute('SELECT * FROM stocks')
             rows = cursor.fetchall()
             return render_template("admin_home.html", rows=rows, message="Product edited")
-    
-
-
-    
-    # result = Stocks.query.filter_by(stock_id = stock_id).first()
-    # if request.method == "POST":
-    #     name = request.form.get("stock_name")
-    #     price = request.form.get("stock_price")
-
-    #     result.stock_name = name
-    #     result.stock_price = price
-    #     db.session.commit()
-    #     rows = Stocks.query.all()
-    #     return render_template("admin_home.html", rows=rows, message="Product edited", user=current_user)
 
     return render_template("edit.html",result=result)
+
+
 		
+
+
+#rendering the HTML page which has the button
+@views.route('/json')
+def json():
+    return render_template('json.html')
+
+#background process happening without any refreshing
+@views.route('/background_process_test')
+def background_process_test():
+    print ("Hello")
+    return ("nothing")
+
+
+
+
+
 
 
     
