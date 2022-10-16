@@ -1,180 +1,109 @@
-{% extends "base.html" %}
-{% block title %}Home {% endblock %}
-{% block content %}
-<h2>These are the available stocks</h2> 
-
-<div class="container" id="topdiv6">
-    
-    {% if rows %}
-            <div class="row" id="index0">
 
 
-                <table>
-                    {% for row in rows %}
-                    <TR>
-                    
-                      
-                       <TD class="c2">{{row.stock_id}}</TD>
-                       <TD class="c3">{{row.stock_name}}</TD>
-                       <TD class="c4"><SPAN>{{row.stock_price}}</SPAN></TD>
-                       
-                    </TR>
-                    {% endfor %}
-                    </table>
-               
-                    
-                <!-- {% for row in rows %}
-                
-                    <div class="card needspace mx-3 my-3 mb-3" style="width: 18rem;">                        
-                        <div class="card-body">
-                            <h5 class="card-title">{{row.stock_name}}</h5>
-                            <p class="card-text">{{row.stock_price}}</p>
-                        </div>
-                         
-                    </div>
-                    {% endfor%} -->
-            </div>
-        {% endif %}
-</div>
-{% endblock %} 
-
-
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Home</title>
+   
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
       crossorigin="anonymous"
     />
-  </head> -->
-
-  <!-- <body>
-    <nav class="navbar navbar-expand-lg bg-light">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">Stock Trade</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/">Market</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Buy/Sell Stocks</a>
-            </li>
-            
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#"
-                >Portfolio</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/logout"
-                >Logout</a
-              >
-            </li>
-
-            
-          
-          </ul>
+    <link rel="stylesheet" href="static/styles.css">
+  </head>
+  <body>
+  
+      <nav class="navbar navbar-expand-lg navbar-scroll fixed-top shadow-0 border-bottom border-dark">
+        <div class="container">
+          <!-- <a class="navbar-brand" href="#!">STOCK TRADE</a> -->
+          <a class="nav-link font-weight-bold" href="#!">STOCK TRADE</a>
+          <!-- <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+            data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+          </button> -->
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="{{url_for('views.home')}}">Market</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#!">Buy/Sell</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#!">Portfolio</a>
+              </li>
+              <li class="nav-item">
+                <form method="GET" action="{{url_for('auth.login')}}">
+                  <input type="submit" class="btn btn-dark ms-3" value="Logout">
+                </form>
+                <!-- <a class="nav-link button" href="{{url_for('auth.login')}}">Logout</a> -->
+              </li>
+              <!-- <button type="button" class="btn btn-dark ms-3">Logout</button> -->
+            </ul>
+          </div>
         </div>
-      </div>
-    </nav>
-
-    {% with messages = get_flashed_messages(with_categories=true) %} {% if
-    messages %} {% for category, message in messages %} {% if category ==
-    'error' %}
-    <div class="alert alert-danger alter-dismissable fade show" role="alert">
-      {{ message }}
-      <button type="button" class="close" data-dismiss="alert">
-        <span aria-hidden="true">&times;</span>
-      </button>
+      </nav>
+  
+  
     </div>
-    {% else %}
-    <div class="alert alert-success alter-dismissable fade show" role="alert">
-      {{ message }}
-      <button type="button" class="close" data-dismiss="alert">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    {% endif %} {% endfor %} {% endif %} {% endwith %}
 
+    
+   
+{% if rows%}
     <div class="container">
-
-
-        {% if rows %}
-        <div class="row" id="index0">
-            
-            <table class="table table-dark">
-                <thead>
-                  <tr>
-                    <th scope="col">SNo.</th>
-                    <th scope="col">Stock Name</th>
-                    <th scope="col">Opening Price</th>
-                    <th scope="col">Closing Price</th>
-                  </tr>
-                </thead>
-                {% for row in rows %}
-                <tbody>
-                  <tr>
-                    <th scope="row">{{row.stock_id}}</th>
-                    <td>{{row.stock_name}}</td>
-                    <td>{{row.stock_price}}</td>
-                    <td>{{row.stock_price}}</td>
-                  </tr>
-                  
-                </tbody>
-                {% endfor %}
-              </table>
-                <div class="card needspace mx-3 my-3 mb-3" style="width: 18rem;">                        
-                    <div class="card-body">
-                        <h5 class="card-title">{{row.stock_name}}</h5>
-                        <p class="card-text">{{row.stock_price}}</p>
-                    </div>
-                     
+      <section class="intro">
+        <div class="gradient-custom-1 h-100">
+          <div class="mask d-flex align-items-center h-100">
+            <div class="container">
+              <div class="row justify-content-center">
+                <div class="col-12">
+                  <div class="table-responsive bg-white">
+                    <table class="table mb-0">
+                      <thead>
+                        <tr>
+                          <th scope="col">NAME</th>
+                          <th scope="col">PRICE</th>
+                          <th scope="col">CONTACTS</th>
+                          <th scope="col">AGE</th>
+                          <th scope="col">ADDRESS</th>
+                          <th scope="col">SALARY</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {%for row in rows%}
+                        <tr>
+                          <th scope="row" style="color: #666666;">{{row.stock_name}}</th>
+                          <td>{{row.stock_price}}</td>
+                          <td>tnixon12@example.com</td>
+                          <td>61</td>
+                          <td>Edinburgh</td>
+                          <td>$320,800</td>
+                        </tr>
+                      {%endfor%}
+                       
+                        
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-           
+              </div>
+            </div>
+          </div>
         </div>
-    {% endif %}
-
-
-
-
-
+      </section>
     </div>
+  {%endif%}
 
     <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
-      crossorigin="anonymous"
-    ></script>
-  </body> -->
-<!-- </html> -->
-
-
-
-
-
-
-
-
-
-
-
-
-
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+    crossorigin="anonymous"
+  ></script>
+  </body>
+  </html>
+  
