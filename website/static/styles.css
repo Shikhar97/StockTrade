@@ -92,3 +92,38 @@ body {
     font-weight: 500;
     color: #999999;
   }
+
+
+
+  /* Split the screen in half */
+.split {
+  height: 100%; 
+  width: 50%;
+  position: fixed;
+  z-index: 1;
+  /* top: 0; */
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+/* Control the left side */
+.left {
+  left: 0;
+  background-color: white;
+}
+
+/* Control the right side */
+.right {
+  right: 0;
+  background-color: white;
+}
+
+/* If you want the content centered horizontally and vertically */
+.centered {
+  
+  /* border: 3px solid green; */
+  /* background-color: #da564f; */
+
+  
+  text-align: center;
+}
