@@ -1,6 +1,12 @@
-from stocksymbol import StockSymbol
+import random
 
+from stocksymbol import StockSymbol
 from lib.db import DB
+
+
+def get_price(init_value, change_factor=0.8):
+    return float("{:.2f}".format(init_value + change_factor * random.randint(int(((init_value + 1) / 2) * -1),
+                                                                             int((init_value + 1) / 2))))
 
 
 class StockList:
@@ -19,3 +25,12 @@ class StockList:
             except Exception as e:
                 if "already exists" in str(e):
                     pass
+
+    def update_price(self):
+        # Updating the price of stocks and updating the DB
+        get_query = "SELECT symbol, curr_price FROM stocks"
+        output = self.db.run_query(get_query)
+        for stock_symbol, stock_price in output:
+            update_query = "UPDATE stocks SET curr_price='%s' WHERE symbol=%s"
+            self.db.run_query(update_query, get_price(stock_price), stock_symbol)
+        print("Updated Stock Prices")

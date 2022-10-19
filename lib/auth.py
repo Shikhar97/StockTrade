@@ -22,14 +22,13 @@ def login():
         # Fetch one record and return result
         # user=db.session.query(User).filter(User.email==email)
         if user:
-            password_rs = user['password']
-            print(password_rs)
+            password_rs = user[0]['password']
             # If account exists in users table in out database
             if check_password_hash(password_rs, password):
                 # Create session data, we can access this data in other routes
                 session['loggedin'] = True
-                session['id'] = user['id']
-                session['email'] = user['email']
+                session['id'] = user[0]['id']
+                session['email'] = user[0]['email']
                 # Redirect to home page
                 return redirect(url_for('views.home'))
             else:
@@ -59,9 +58,6 @@ def sign_up():
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
         email = request.form.get('email')
-        print(name)
-        print(email)
-        print(password1)
         _hashed_password = generate_password_hash(password1)
 
         # Check if account exists using MySQL
@@ -96,14 +92,14 @@ def admin():
         user = db_obj.run_query('SELECT * FROM users WHERE email = %s', email)
         # Fetch one record and return result
         if user:
-            password_rs = user['password']
+            password_rs = user[0]['password']
             print(password_rs)
             # If account exists in users table in out database
             if check_password_hash(password_rs, password):
                 # Create session data, we can access this data in other routes
                 session['loggedin'] = True
-                session['id'] = user['id']
-                session['email'] = user['email']
+                session['id'] = user[0]['id']
+                session['email'] = user[0]['email']
                 # Redirect to home page
                 return redirect(url_for('views.adminhome'))
             else:

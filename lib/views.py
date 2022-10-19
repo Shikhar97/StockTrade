@@ -14,7 +14,7 @@ def home():
     # Check if user is loggedin
     if 'loggedin' in session:
         # User is Logged-in show them the home page
-        rows = session["db_obj"].run_query('SELECT * FROM stocks')
+        rows = db_obj.run_query('SELECT * FROM stocks')
         return render_template("home.html", rows=rows)
     return redirect(url_for('auth.login'))
 
@@ -41,11 +41,11 @@ def edit(stock_id):
     result = {}
     # Check if user is loggedin
     if 'loggedin' in session:
-        result = db_obj.run_query('SELECT * FROM stocks WHERE stock_id = %s', stock_id)
+        result = db_obj.run_query('SELECT * FROM stocks WHERE id = %s', stock_id)
         if request.method == "POST":
             name = request.form.get("stock_name")
             price = request.form.get("stock_price")
-            update_query = "UPDATE stocks SET stock_name = %s, curr_price = %s WHERE stock_id = %s"
+            update_query = "UPDATE stocks SET stock_name = %s, curr_price = %s WHERE id = %s"
             db_obj.run_query(update_query, name, price, stock_id)
             rows = db_obj.run_query('SELECT * FROM stocks')
             return render_template("admin_home.html", rows=rows, message="Product edited")
@@ -88,17 +88,17 @@ def orderpage():
     if 'loggedin' in session:
         user_id = session['id']
         sql = "SELECT stocks.stock_name, stocks.stock_price, transaction_his.quantity, transaction_his.price " \
-              "FROM stocks INNER JOIN transaction_his ON stocks.stock_id = transaction_his.stock_id " \
+              "FROM stocks INNER JOIN transaction_his ON stocks.id = transaction_his.stock_id " \
               "WHERE transaction_his.user_id = %s ORDER BY order_id DESC"
         rows = db_obj.run_query(sql, user_id)
         return render_template("orders.html", rows=rows)
     return redirect(url_for('views.home'))
 
 
-@views.route("/ajaxfile", methods=["POST", "GET"])
+@views.route("/buysell", methods=["POST", "GET"])
 def ajaxfile():
     stock_details = {}
     if request.method == 'POST':
-        stock_id = request.form['stock_id']
-        stock_details = db_obj.run_query("SELECT * FROM stocks WHERE stock_id = %s", stock_id)
+        stock_id = request.form['id']
+        stock_details = db_obj.run_query("SELECT * FROM stocks WHERE id = %s", stock_id)
     return jsonify({'htmlresponse': render_template('response.html', stock_details=stock_details)})

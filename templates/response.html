@@ -10,13 +10,13 @@
             
             </td>
             <td>
-              <p>Current Market Price : {{row.stock_price}}</p>
+              <p>Current Market Price : {{row.curr_price}}</p>
             </td>
         </tr>
     </table>
     
 <div class="container">
-    <form action= "{{ url_for('views.orders', stock_id = row.stock_id) }}" method="POST">
+    <form action= "{{ url_for('views.orders', stock_id = row.id) }}" method="POST">
         <div class="form-group mb-3">
           <label for="quantity">Quantity</label>
           <input

@@ -1,21 +1,18 @@
 from flask import Flask
-
-from lib.stock_price_updater import UpdateStock
 from lib.views import views
 from lib.auth import auth
 from lib.stock_ticker import StockList
 from apscheduler.schedulers.background import BackgroundScheduler
 
-def init_db():
-    s_t = StockList()
-    s_t.initialize_db()
 
 def setup_stock_updater():
-    u_t = UpdateStock()
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(u_t.update_price, 'interval', seconds=60)
-    scheduler.start()
-    return scheduler
+    s_t = StockList()
+    s_t.initialize_db()
+    sched = BackgroundScheduler()
+    sched.add_job(s_t.update_price, 'interval', seconds=60)
+    sched.start()
+    return sched
+
 
 def create_app():
     app = Flask(__name__)
@@ -28,11 +25,10 @@ def create_app():
 
 
 if __name__ == '__main__':
-    init_db()
-    scheduler = setup_stock_updater()
+    # scheduler = setup_stock_updater()
     app = create_app()
     app.run(port=5000, debug=True)
-    scheduler.shutdown()
+    # scheduler.shutdown()
 
 
  

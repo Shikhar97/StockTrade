@@ -19,7 +19,7 @@ class DB:
                                                database=db_name)
             self.connection.autocommit = True
             # Create a cursor to perform database operations
-            self.cursor = self.connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            self.cursor = self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
             # Executing a SQL query
             self.cursor.execute("SELECT version();")
@@ -47,3 +47,11 @@ class DB:
 
     def __del__(self):
         self.disconnect_db()
+
+
+# DB_NAME = "stock_trade"
+# DB_USER = "admin"
+# DB_PASS = "admin"
+# db_obj = DB(DB_USER, DB_PASS, DB_NAME)
+# user = db_obj.run_query("SELECT * FROM users WHERE email ='sample@gmail.com'")
+# print(user["id"])
