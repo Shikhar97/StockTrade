@@ -4,12 +4,13 @@ DROP TABLE IF EXISTS users CASCADE ;
 DROP TABLE IF EXISTS admin_users CASCADE;
 DROP TABLE IF EXISTS transaction_his CASCADE;
 DROP TABLE IF EXISTS user_portfolio CASCADE;
+DROP TABLE IF EXISTS market_hour CASCADE;
 
 DROP TRIGGER IF EXISTS user_data on users;
 
 CREATE TABLE stocks (
     id SERIAL,
-    symbol VARCHAR NOT NULL ,
+    symbol VARCHAR NOT NULL UNIQUE ,
     stock_name VARCHAR NOT NULL ,
     day_high FLOAT DEFAULT 0.0,
     day_low FLOAT DEFAULT 0.0,
@@ -79,6 +80,12 @@ CREATE TABLE pending_orders (
 	CONSTRAINT user_det
       FOREIGN KEY(user_id)
 	  REFERENCES users(id)
+);
+
+CREATE TABLE market_hour (
+  day_name VARCHAR NOT NULL ,
+  to_time DATE NOT NULL ,
+  from_time DATE NOT NULL
 );
 
 -- Creating Triggers

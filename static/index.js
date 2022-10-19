@@ -15,6 +15,18 @@
 // 		}
 // 	}
 // });
+$(document).ready(function () {
+    $(document).on('click', '.refresher', function () {
+        $.ajax({
+            url: 'ajax.php',
+            method: get,
+            dataType: 'json',
+            success: function(response) {
+                $('#table-to-refresh').html(response);
+            }
+        });
+    });
+});
 
 
 document.getElementById('basicAlert').addEventListener('click', function () {

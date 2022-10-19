@@ -1,9 +1,11 @@
 import psycopg2
-from psycopg2 import Error
+from psycopg2 import Error, extras
+
 
 
 class DB:
     def __init__(self, user, password, db_name, host="127.0.0.1", port="5432"):
+        self.cursor = None
         self.connection = None
         self.connect_db(user, password, db_name, host, port)
 
@@ -15,9 +17,10 @@ class DB:
                                                host=host,
                                                port=port,
                                                database=db_name)
-
+            self.connection.autocommit = True
             # Create a cursor to perform database operations
-            self.cursor = self.connection.cursor()
+            self.cursor = self.connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
             # Executing a SQL query
             self.cursor.execute("SELECT version();")
             # Fetch result
@@ -38,6 +41,9 @@ class DB:
 
     def disconnect_db(self):
         if self.connection:
-            self.connection.close()
+            self.cursor.close()
             self.connection.close()
             print("PostgreSQL connection is closed")
+
+    def __del__(self):
+        self.disconnect_db()
