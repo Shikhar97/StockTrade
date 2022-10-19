@@ -1,3 +1,4 @@
+# from crypt import methods
 from flask import Blueprint, render_template, request, flash, redirect, url_for,session
 from werkzeug.security import generate_password_hash, check_password_hash
 import psycopg2 
@@ -129,3 +130,8 @@ def admin():
     return render_template("admin.html")
 
 
+
+
+@auth.route('/test', methods=['GET','POST'])
+def test():
+    return render_template("rough.html")
