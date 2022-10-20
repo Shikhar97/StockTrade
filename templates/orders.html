@@ -5,45 +5,52 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orders</title>
-    <link rel="stylesheet" href="static/bootstrap.min.css"/>
-    <link rel="stylesheet" href="static/styles.css"/>
 
-    <script src="static/jquery.min.js"></script>
-    <script src="static/bootstrap.bundle.min.js"></script>
-    <script src="static/index.js"></script>
+    <link rel="stylesheet" href="static/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="static/css/fontawesome.css"/>
+    <link rel="stylesheet" href="static/css/brands.css"/>
+    <link rel="stylesheet" href="static/css/solid.css"/>
+
+    <link rel="stylesheet" href="static/css/styles.css"/>
+    <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/bootstrap.bundle.min.js"></script>
+    <script src="static/js/index.js"></script>
 </head>
 <body>
-    <nav
-    class="navbar navbar-expand-lg navbar-scroll fixed-top shadow-0 border-bottom border-dark"
-  >
-    <div class="container">
-      <!-- <a class="navbar-brand" href="#!">STOCK TRADE</a> -->
-      <a class="nav-link font-weight-bold" href="#!">STOCK TRADE</a>
-      <!-- <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
-          data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-          aria-label="Toggle navigation">
-          <i class="fas fa-bars"></i>
-        </button> -->
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="{{url_for('views.home')}}">Market</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{url_for('views.orderpage')}}">Orders</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{url_for('views.portfolio')}}">Portfolio</a>
-          </li>
-          <li class="nav-item">
-            <form method="GET" action="{{url_for('auth.login')}}">
-              <input type="submit" class="btn btn-dark ms-3" value="Logout" />
-            </form>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+    <marquee class="news-scroll fixed-bottom" behavior="scroll" direction="left" onmouseover="this.stop();"
+             onmouseout="this.start();">
+        {% if stock_rows %}
+            {% for row in stock_rows %}
+                <a>{{ row.symbol }} {{ row.curr_price }}</a>
+                <i class="fa-solid fa-circle fa-2xs"></i>
+            {% endfor %}
+        {% endif %}
+    </marquee>
+<div>
+    <nav class="navbar navbar-expand-lg navbar-scroll shadow-0 fixed-top border-bottom border-dark">
+        <div class="container">
+            <a class="nav-link font-weight-bold">STOCK TRADE</a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('views.home') }}">Market</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('views.orderpage') }}">Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('views.portfolio') }}">Portfolio</a>
+                    </li>
+                    <li class="nav-item">
+                        <form method="GET" action="{{ url_for('auth.login') }}">
+                            <input type="submit" class="btn btn-dark ms-3" value="Logout"/>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
 
 
 
@@ -61,23 +68,23 @@
                     <table class="table mb-0">
                       <thead>
                         <tr>
-                          <th scope="col">STOCK ID</th>
-                          <th scope="col">NUMBER OF SHARES</th>
-                          <th scope="col">PRICE</th>
-                          <th scope="col">TYPE OF ORDER</th>
-                         
+                          <th scope="col">Stock</th>
+                          <th scope="col">Volume</th>
+                          <th scope="col">Price</th>
+                          <th scope="col">Order Type</th>
+
                         </tr>
                       </thead>
                       <tbody>
                         {%for row in rows%}
                         <tr>
-                          <td scope="row" style="color: #666666">
+                          <td style="color: #666666">
                             {{row.stock_name}}
                           </td>
                           <td>{{row.quantity}}</td>
                           <td>{{row.price}}</td>
-                          <td>61</td>
-                          
+                          <td>{{ row.order_type }}</td>
+
                         </tr>
                         {%endfor%}
                       </tbody>
@@ -91,6 +98,7 @@
       </section>
     </div>
     {%endif%}
-    
+
+
 </body>
 </html>

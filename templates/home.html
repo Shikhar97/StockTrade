@@ -5,40 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Home</title>
 
-    <link rel="stylesheet" href="static/bootstrap.min.css"/>
-    <link rel="stylesheet" href="static/styles.css"/>
-    <script src="static/jquery.min.js"></script>
-    <script src="static/bootstrap.bundle.min.js"></script>
-    <script src="static/index.js"></script>
+    <link rel="stylesheet" href="static/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="static/css/fontawesome.css"/>
+    <link rel="stylesheet" href="static/css/brands.css"/>
+    <link rel="stylesheet" href="static/css/solid.css"/>
+
+    <link rel="stylesheet" href="static/css/styles.css"/>
+    <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/bootstrap.bundle.min.js"></script>
+    <script src="static/js/index.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400&display=swap" rel="stylesheet">
+
 
 </head>
 <body>
-    <div class="container mt-5">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="d-flex justify-content-between align-items-center breaking-news bg-white">
-                <marquee class="news-scroll" behavior="scroll" direction="left" onmouseover="this.stop();" onmouseout="this.start();">
-                    <a href="#">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </a>
-                    <span class="dot"></span>
-                    <a href="#">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut </a>
-                    <span class="dot"></span>
-                    <a href="#">Duis aute irure dolor in reprehenderit in voluptate velit esse </a>
-                </marquee>
-            </div>
-        </div>
-    </div>
+<div class="d-flex justify-content-between fixed-bottom align-items-center breaking-news bg-white">
+    <marquee class="news-scroll" behavior="scroll" direction="left" onmouseover="this.stop();"
+             onmouseout="this.start();">
+        {% if rows %}
+            {% for row in rows %}
+                <a>{{ row.symbol }} {{ row.curr_price }}</a>
+                <i class="fa-solid fa-circle fa-2xs"></i>
+            {% endfor %}
+        {% endif %}
+    </marquee>
 </div>
 
 <nav class="navbar navbar-expand-lg navbar-scroll fixed-top shadow-0 border-bottom border-dark">
 
     <div class="container">
-        <!-- <a class="navbar-brand" href="#!">STOCK TRADE</a> -->
         <a class="nav-link font-weight-bold">STOCK TRADE</a>
-        <!-- <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
-            data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-            aria-label="Toggle navigation">
-            <i class="fas fa-bars"></i>
-          </button> -->
+
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
@@ -80,6 +79,8 @@
                                             <th scope="col">Open Price</th>
                                             <th scope="col">Closing Price</th>
                                             <th scope="col">Market Cap.</th>
+                                            <th scope="col"></th>
+
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -93,6 +94,7 @@
                                                 <td>{{ row.day_low }}</td>
                                                 <td>{{ row.open_price }}</td>
                                                 <td>{{ row.close_price }}</td>
+                                                <td>{{ row.volume * row.curr_price }}</td>
 
                                                 <td>
                                                     <button data-id='{{ row.id }}' class="userinfo btn btn-dark ms-3">

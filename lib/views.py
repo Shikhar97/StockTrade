@@ -71,7 +71,8 @@ def orders(stock_id):
             return redirect(url_for('views.orderpage'))
 
         else:
-            return render_template("orders.html")
+            rows = db_obj.run_query('SELECT * FROM stocks ORDER BY id ASC')
+            return render_template("orders.html", rows=rows)
     else:
         return render_template("home.html")
 
@@ -91,7 +92,8 @@ def orderpage():
               "FROM stocks INNER JOIN transaction_his ON stocks.id = transaction_his.stock_id " \
               "WHERE transaction_his.user_id = %s ORDER BY order_id DESC"
         rows = db_obj.run_query(sql, user_id)
-        return render_template("orders.html", rows=rows)
+        stock_rows = db_obj.run_query('SELECT * FROM stocks ORDER BY id ASC')
+        return render_template("orders.html", rows=rows, stock_rows=stock_rows)
     return redirect(url_for('views.home'))
 
 
