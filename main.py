@@ -25,10 +25,10 @@ def create_app():
 
 
 if __name__ == '__main__':
-    # scheduler = setup_stock_updater()
+    scheduler = setup_stock_updater()
     app = create_app()
     app.run(port=5000, debug=True)
-    # scheduler.shutdown()
+    scheduler.shutdown()
 
 
  

@@ -24,28 +24,28 @@ $(document).ready(function () {
                 type: 'post',
                 data: {id: stock_id},
                 success: function(data){
-                    $('.modal-body').html(data);
+                    // $('.modal-body').html(data);
                     $('.modal-body').append(data.htmlresponse);
                     $('#empModal').modal('show');
                 }
             });
           });
-    $(document).on('click', '.refresher', function () {
+    setInterval(refreshTable, 10000);
+});
+
+function refreshTable(){
         $.ajax({
             url: '/',
-            method: get,
+            type: 'GET',
             dataType: 'json',
             success: function(response) {
                 $('#table-to-refresh').html(response);
             }
         });
-    });
-});
-
-
-document.getElementById('basicAlert').addEventListener('click', function () {
-    Swal.fire(
-        'Basic alert',
-        'You clicked the button!'
-    )
-});
+    }
+// document.getElementById('basicAlert').addEventListener('click', function () {
+//     Swal.fire(
+//         'Basic alert',
+//         'You clicked the button!'
+//     )
+// });

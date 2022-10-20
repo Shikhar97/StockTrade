@@ -14,7 +14,7 @@ def home():
     # Check if user is loggedin
     if 'loggedin' in session:
         # User is Logged-in show them the home page
-        rows = db_obj.run_query('SELECT * FROM stocks')
+        rows = db_obj.run_query('SELECT * FROM stocks ORDER BY id ASC')
         return render_template("home.html", rows=rows)
     return redirect(url_for('auth.login'))
 
@@ -27,7 +27,7 @@ def admin_home():
         if request.method == "POST":
             name = request.form.get('stock_name')
             price = request.form.get('stock_price')
-            db_obj.run_query("INSERT INTO stocks (stock_name,stock_price) VALUES (%s,%s)", name, price)
+            db_obj.run_query("INSERT INTO stocks (stock_name,curr_price) VALUES (%s,%s)", name, price)
             rows = db_obj.run_query('SELECT * FROM stocks')
             return render_template("admin_home.html", message="Stock added successfully", rows=rows)
         return render_template("admin_home.html", rows=rows)
@@ -87,7 +87,7 @@ def portfolio():
 def orderpage():
     if 'loggedin' in session:
         user_id = session['id']
-        sql = "SELECT stocks.stock_name, stocks.stock_price, transaction_his.quantity, transaction_his.price " \
+        sql = "SELECT stocks.stock_name, stocks.curr_price, transaction_his.quantity, transaction_his.price " \
               "FROM stocks INNER JOIN transaction_his ON stocks.id = transaction_his.stock_id " \
               "WHERE transaction_his.user_id = %s ORDER BY order_id DESC"
         rows = db_obj.run_query(sql, user_id)
