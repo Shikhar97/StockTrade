@@ -45,6 +45,7 @@ CREATE TABLE transaction_his (
     stock_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
     trans_type VARCHAR NOT NULL,
+    order_type VARCHAR NOT NULL,
     quantity INTEGER NOT NULL,
     price FLOAT NOT NULL ,
     PRIMARY KEY(order_id),
@@ -74,6 +75,7 @@ CREATE TABLE pending_orders (
     quantity INTEGER NOT NULL,
     limit_price FLOAT NOT NULL ,
     triggered BOOL DEFAULT FALSE,
+    expiry_date DATE DEFAULT CURRENT_DATE,
     CONSTRAINT stock_det
       FOREIGN KEY(stock_id)
 	  REFERENCES stocks(id),
@@ -83,9 +85,9 @@ CREATE TABLE pending_orders (
 );
 
 CREATE TABLE market_hour (
-  day_name VARCHAR NOT NULL ,
-  to_time DATE NOT NULL ,
-  from_time DATE NOT NULL
+  day_name VARCHAR NOT NULL UNIQUE ,
+  to_time TIME NOT NULL ,
+  from_time TIME NOT NULL
 );
 
 -- Creating Triggers
@@ -105,3 +107,12 @@ CREATE TRIGGER user_data AFTER INSERT
     ON users
     FOR EACH ROW
     EXECUTE PROCEDURE init_user();
+
+-- Initialize Market Hours
+INSERT INTO market_hour VALUES ('Monday','9:00:00', '15:00:00' );
+INSERT INTO market_hour VALUES ('Tuesday','9:00:00', '15:00:00' );
+INSERT INTO market_hour VALUES ('Wednesday','9:00:00', '15:00:00' );
+INSERT INTO market_hour VALUES ('Thursday','9:00:00', '15:00:00' );
+INSERT INTO market_hour VALUES ('Friday','9:00:00', '15:00:00' );
+INSERT INTO market_hour VALUES ('Saturday','9:00:00', '9:00:01' );
+INSERT INTO market_hour VALUES ('Sunday','9:00:00', '9:00:01' );

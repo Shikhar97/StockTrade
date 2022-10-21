@@ -17,40 +17,58 @@
     <div class="container">
         <form action="{{ url_for('views.orders', stock_id = row.id) }}" method="POST">
             <div class="form-group mb-3">
-                <label for="quantity">Quantity</label>
-                <input
-                        type="number"
-                        class="form-control"
-                        id="quantity"
-                        name="quantity"
-                        placeholder="Enter a quantity (1-100)"
-                        min="1"
-                        max="100"
-                />
-            </div>
+                <input type="radio" id="buy" name="trans_type" value="Buy">
+                <label for="buy">Buy</label><br>
 
-            <div class="form-group mb-3">
-                <label for="price">Price (0=Market Order)</label>
-                <input
-                        type="number"
-                        class="form-control"
-                        id="price"
-                        name="price"
-                        placeholder="Enter price"
+                <input type="radio" id="sell" name="trans_type" value="Sell">
+                <label for="sell">Sell</label><br>
 
-                />
-            </div>
-            <!-- <div class="form-group mb-3">
-    <label for="amount">Total Amount</label>
-    <input type="text" id="amount" value="" disabled />
-    </div> -->
-            <br/>
-            <button
-                    type="submit"
-                    class="btn btn-primary"
-            >
-                Place Order
-            </button>
+                <input type="radio" id="limit" name="order_type" value="Limit" onclick="yesnoCheck()">
+                <label for="limit">Limit</label><br>
+
+                <input type="radio" id="market" name="order_type" value="Market" onclick="yesnoCheck()">
+                <label for="market">Market</label><br>
+
+                <div id="ifYes" style="display:none">
+                    <label for='expiry'>Order Expiry</label>
+                    <input type='date' id='expiry' name='expiry'><br>
+                </div>
+
+                {#                Yes <input type="radio" onclick="javascript:yesnoCheck();" name="yesno" id="yesCheck"> #}
+                {#                No <input type="radio" onclick="javascript:yesnoCheck();" name="yesno" id="noCheck"><br>#}
+                {#                <div id="ifYes" style="display:none">#}
+                {#                    If yes, explain: <input type='text' id='yes' name='yes'><br>#}
+                {#                    What can we do to accommodate you? <input type='text' id='acc' name='acc'>#}
+                {#                </div>#}
+                <div>
+
+                    <label for="quantity">Quantity</label>
+                    <input
+                            type="number"
+                            class="form-control"
+                            id="quantity"
+                            name="quantity"
+                            placeholder="Enter a quantity (1-100)"
+                            min="1"
+                            max="100"
+                    />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="price">Price(USD)</label>
+                    <input
+                            type="number"
+                            class="form-control"
+                            id="price"
+                            name="price"
+                            placeholder="Enter price"
+
+                    />
+                </div>
+                <br/>
+                <button type="submit" class="btn btn-primary">
+                    Place Order
+                </button>
         </form>
     </div>
 
