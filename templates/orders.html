@@ -17,15 +17,15 @@
     <script src="static/js/index.js"></script>
 </head>
 <body>
-    <marquee class="news-scroll fixed-bottom" behavior="scroll" direction="left" onmouseover="this.stop();"
-             onmouseout="this.start();">
-        {% if stock_rows %}
-            {% for row in stock_rows %}
-                <a>{{ row.symbol }} {{ row.curr_price }}</a>
-                <i class="fa-solid fa-circle fa-2xs"></i>
-            {% endfor %}
-        {% endif %}
-    </marquee>
+<marquee class="news-scroll fixed-bottom" behavior="scroll" direction="left" onmouseover="this.stop();"
+         onmouseout="this.start();">
+    {% if stock_rows %}
+        {% for row in stock_rows %}
+            <a>{{ row.symbol }} {{ row.curr_price }}</a>
+            <i class="fa-solid fa-circle fa-2xs"></i>
+        {% endfor %}
+    {% endif %}
+</marquee>
 <div>
     <nav class="navbar navbar-expand-lg navbar-scroll shadow-0 fixed-top border-bottom border-dark">
         <div class="container">
@@ -57,63 +57,66 @@
     messages %} {% for category, message in messages %} {% if category ==
     'error' %}
     <div class="alert alert-danger alter-dismissable fade show" role="alert">
-      {{ message }}
-      <button type="button" class="close" data-dismiss="alert">
-        <span aria-hidden="true">&times;</span>
-      </button>
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
-    {% else %}
+{% else %}
     <div class="alert alert-success alter-dismissable fade show" role="alert">
-      {{ message }}
-      <button type="button" class="close" data-dismiss="alert">
-        <span aria-hidden="true">&times;</span>
-      </button>
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
-    {% endif %} {% endfor %} {% endif %} {% endwith %}
+{% endif %} {% endfor %} {% endif %} {% endwith %}
 
 
-  {% if rows%}
+{% if rows %}
     <div class="container">
-      <section class="intro">
-        <div class="gradient-custom-1 h-100">
-          <div class="mask d-flex align-items-center h-100">
-            <div class="container">
-              <div class="row justify-content-center">
-                <div class="col-12">
-                  <div class="table-responsive bg-white">
-                    <table class="table mb-0">
-                      <thead>
-                        <tr>
-                          <th scope="col">Stock</th>
-                          <th scope="col">Volume</th>
-                          <th scope="col">Price</th>
-                          <th scope="col">Order Type</th>
+        <section class="intro">
+            <div class="gradient-custom-1 h-100">
+                <div class="mask d-flex align-items-center h-100">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-12">
+                                <div class="table-responsive bg-white">
+                                    <table class="table mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Stock</th>
+                                            <th scope="col">Volume</th>
+                                            <th scope="col">Price</th>
+                                            <th scope="col">Order Type</th>
+                                            <th scope="col">Transaction Type</th>
 
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {%for row in rows%}
-                        <tr>
-                          <td style="color: #666666">
-                            {{row.stock_name}}
-                          </td>
-                          <td>{{row.quantity}}</td>
-                          <td>{{row.price}}</td>
-                          <td>{{ row.order_type }}</td>
 
-                        </tr>
-                        {%endfor%}
-                      </tbody>
-                    </table>
-                  </div>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for row in rows %}
+                                            <tr>
+                                                <td style="color: #666666">
+                                                    {{ row.stock_name }}
+                                                </td>
+                                                <td>{{ row.quantity }}</td>
+                                                <td>{{ row.price }}</td>
+                                                <td>{{ row.order_type }}</td>
+                                                <td>{{ row.trans_type }}</td>
+
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
-        </div>
-      </section>
+        </section>
     </div>
-    {%endif%}
+{% endif %}
 
 
 </body>

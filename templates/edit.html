@@ -1,41 +1,57 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Edit product page</title>
-	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="Pragma" content="no-cache" />
-	<meta http-equiv="Expires" content="0" />
+{% for row in rows %}
 
-	<link rel="stylesheet" href="static/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="static/css/fontawesome.css"/>
-    <link rel="stylesheet" href="static/css/brands.css"/>
-    <link rel="stylesheet" href="static/css/solid.css"/>
+    <table class="table">
+        <tr>
+            <td>
 
-    <link rel="stylesheet" href="static/css/styles.css"/>
-    <script src="static/js/jquery.min.js"></script>
-    <script src="static/js/bootstrap.bundle.min.js"></script>
-    <script src="static/js/index.js"></script>
+                <p>Stock Name : {{ row.stock_name }}</p>
 
-</head>
-<body>
-	<div class="container" id="topdiv5">
-		<h5 class="card-title">Edit your Product</h5>
-		<form action="{{ url_for('views.edit', stock_id = result.stock_id) }}" method="POST">
-			
-	  		<div class="form-group">
-	    		<label for="exampleFormControlTextarea1">Name</label>
-	    		<textarea class="form-control" id="exampleFormControlTextarea1" rows="1" name="stock_name" required>{{result.stock_name}}</textarea>
-	  		</div>
-	  		<div class="form-group">
-	    		<label for="exampleFormControlTextarea1">Price</label>
-	    		<textarea class="form-control" id="exampleFormControlTextarea1" rows="1" name="stock_price" required>{{result.stock_price}}</textarea>
-	  		</div>
-			
-	  		<button type="submit" class="btn btn-primary">Done</button>
-		</form>
-	</div>
-		
-    </body>
-    </html>
-		
+
+            </td>
+            <td>
+                <p>Current Market Price : {{ row.curr_price }}</p>
+            </td>
+        </tr>
+    </table>
+
+    <div class="container">
+        <form action="{{ url_for('views.edit', stock_id = row.id) }}" method="POST">
+            <div class="form-group mb-3">
+                <label for="stock_name">Name</label>
+                <input
+					type="text"
+					class="form-control"
+					id="stock_name"
+					name="stock_name"
+					placeholder="Name"
+				/>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="stock_price">Price</label>
+                <input
+                        type="number"
+                        class="form-control"
+                        id="stock_price"
+                        name="stock_price"
+                        placeholder="Price"
+
+                />
+            </div>
+            <!-- <div class="form-group mb-3">
+    <label for="amount">Total Amount</label>
+    <input type="text" id="amount" value="" disabled />
+    </div> -->
+            <br/>
+            <button
+                    type="submit"
+                    class="btn btn-primary"
+            >
+                Apply Changes
+            </button>
+        </form>
+    </div>
+
+
+
+{% endfor %}
