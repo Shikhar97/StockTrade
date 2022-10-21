@@ -85,11 +85,14 @@
               <a class="nav-link" href="#!">Portfolio</a>
             </li> -->
             <li class="nav-item">
+              <a class="nav-link" href="{{url_for('auth.login')}}">Login</a>
+            </li>
+            <!-- <li class="nav-item">
               <form method="GET" action="{{url_for('auth.admin')}}">
                 <input type="submit" class="btn btn-dark ms-3" value="Admin">
               </form>
-              <!-- <a class="nav-link button" href="{{url_for('auth.login')}}">Logout</a> -->
-            </li>
+              <a class="nav-link button" href="{{url_for('auth.login')}}">Logout</a>
+            </li> -->
             <!-- <button type="button" class="btn btn-dark ms-3">Logout</button> -->
           </ul>
         </div>

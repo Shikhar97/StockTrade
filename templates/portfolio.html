@@ -1,34 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Home</title>
 
-    <link rel="stylesheet" href="static/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="static/css/fontawesome.css"/>
-    <link rel="stylesheet" href="static/css/brands.css"/>
-    <link rel="stylesheet" href="static/css/solid.css"/>
+    <link rel="stylesheet" href="static/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="static/css/fontawesome.css" />
+    <link rel="stylesheet" href="static/css/brands.css" />
+    <link rel="stylesheet" href="static/css/solid.css" />
 
-    <link rel="stylesheet" href="static/css/styles.css"/>
+    <link rel="stylesheet" href="static/css/styles.css" />
     <script src="static/js/jquery.min.js"></script>
     <script src="static/js/bootstrap.bundle.min.js"></script>
     <script src="static/js/index.js"></script>
-</head>
-<body>
-<div class="d-flex justify-content-between fixed-bottom align-items-center breaking-news bg-white">
-    <marquee class="news-scroll" behavior="scroll" direction="left" onmouseover="this.stop();"
-             onmouseout="this.start();">
-        {% if rows %}
-            {% for row in rows %}
-                <a>{{ row.symbol }} {{ row.curr_price }}</a>
-                <i class="fa-solid fa-circle fa-2xs"></i>
-            {% endfor %}
-        {% endif %}
-    </marquee>
-</div>
-<nav class="navbar navbar-expand-lg navbar-scroll fixed-top shadow-0 border-bottom border-dark">
-    <div class="container">
+  </head>
+  <body>
+    <div
+      class="d-flex justify-content-between fixed-bottom align-items-center breaking-news bg-white"
+    >
+      <marquee
+        class="news-scroll"
+        behavior="scroll"
+        direction="left"
+        onmouseover="this.stop();"
+        onmouseout="this.start();"
+      >
+        {% if rows %} {% for row in rows %}
+        <a>{{ row.symbol }} {{ row.curr_price }}</a>
+        <i class="fa-solid fa-circle fa-2xs"></i>
+        {% endfor %} {% endif %}
+      </marquee>
+    </div>
+    <nav
+      class="navbar navbar-expand-lg navbar-scroll fixed-top shadow-0 border-bottom border-dark"
+    >
+      <div class="container">
         <!-- <a class="navbar-brand" href="#!">STOCK TRADE</a> -->
         <a class="nav-link font-weight-bold">STOCK TRADE</a>
         <!-- <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
@@ -37,43 +44,132 @@
             <i class="fas fa-bars"></i>
           </button> -->
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('views.home') }}">Market</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('views.orderpage') }}">Orders</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('views.portfolio') }}">Portfolio</a>
-                </li>
-                <li class="nav-item">
-                    <form method="GET" action="{{ url_for('auth.login') }}">
-                        <input type="submit" class="btn btn-dark ms-3" value="Logout"/>
-                    </form>
-                </li>
-            </ul>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('views.home') }}">Market</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('views.orderpage') }}"
+                >Orders</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('views.portfolio') }}"
+                >Portfolio</a
+              >
+            </li>
+            <li class="nav-item">
+              <form method="GET" action="{{ url_for('auth.login') }}">
+                <input type="submit" class="btn btn-dark ms-3" value="Logout" />
+              </form>
+            </li>
+          </ul>
         </div>
+      </div>
+    </nav>
+    {%if rows%}
+        {% for row in rows %}
+    <div class="container">
+       
+      <h2>FUNDS : Rs {{row.funds}} </h2>
+        
+      
+
+     
+
+      <button type="button" class="btn btn-dark ms-3 btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">ADD</button>
+      <button type="button" class="btn btn-dark ms-3 btn-primary" data-bs-toggle="modal" data-bs-target="#withdrawModal">WITHDRAW</button>
+      <h2>INVESTED VALUE</h2>
     </div>
-</nav>
-<div class="container">
+   
 
-    <div class="split left">
-        <div class="centered">
-
-            <h2>FUNDS</h2>
-
+    <!-- The Modal -->
+<div class="modal" id="addModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+  
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">ADD FUNDS</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
-    </div>
-
-    <div class="split right">
-        <div class="centered">
-
-            <h2>INVESTED VALUE</h2>
-
+  
+        <!-- Modal body -->
+        <div class="modal-body">
+        
+                <form action="{{ url_for('views.addfunds') }}" method="POST">
+                    <div class="form-group mb-3">
+                        <label for="quantity">Amount</label>
+                        <input
+                                type="number"
+                                class="form-control"
+                                id="quantity"
+                                name="quantity"
+                                placeholder="Enter amount"
+                            
+                        />
+                    </div>
+        
+                   
+                    <br/>
+                    <button
+                            type="submit"
+                            class="btn btn-primary"
+                    >
+                        Add funds
+                    </button>
+                </form>
+        
+            
         </div>
+  
+      </div>
     </div>
-</div>
-
-</body>
+  </div>
+    <!-- The Modal for withdraw-->
+<div class="modal" id="withdrawModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+  
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">WITHDRAW FUNDS</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+  
+        <!-- Modal body -->
+        <div class="modal-body">
+            <p>Availabe funds to withdraw : Rs {{row.funds}} </p>
+            <form action="{{ url_for('views.withdrawfunds') }}" method="POST">
+                <div class="form-group mb-3">
+                    <label for="quantity">Amount</label>
+                    <input
+                            type="number"
+                            class="form-control"
+                            id="quantity"
+                            name="quantity"
+                            placeholder="Enter amount"
+                            min="1"
+                            max="{{row.funds}}"
+                        
+                    />
+                </div>
+    
+               
+                <br/>
+                <button
+                        type="submit"
+                        class="btn btn-primary"
+                >
+                    Withdraw funds
+                </button>
+            </form>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  {% endif %}
+  </body>
 </html>
