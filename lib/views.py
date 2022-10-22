@@ -117,6 +117,7 @@ def portfolio():
         update_query = "UPDATE user_portfolio SET invested_value=%s WHERE user_id=%s"
         db_obj.run_query(update_query, round(invested_value, 2), session["id"])
         fund = db_obj.run_query("SELECT * FROM user_portfolio WHERE user_id=%s", session["id"])
+        print(fund)
         stock_rows = db_obj.run_query('SELECT * FROM stocks ORDER BY id ASC')
         stock_data = "SELECT symbol, SUM(case when trans_type='Buy' then quantity else - quantity end) as stock_count " \
                      "FROM transaction_his  INNER JOIN stocks on stocks.id = transaction_his.stock_id " \

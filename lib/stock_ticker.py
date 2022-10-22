@@ -43,8 +43,9 @@ class StockList:
                 updated_high = updated_price
             elif updated_price < stock["day_low"]:
                 updated_low = updated_price
-            update_query = "UPDATE stocks SET curr_price=%s, day_low=%s, day_high=%s, mark_cap=%s WHERE symbol=%s"
-            self.db.run_query(update_query, float(updated_price), float(updated_low),
+            update_query = "UPDATE stocks SET prev_curr_price=%s, curr_price=%s, day_low=%s, day_high=%s, mark_cap=%s " \
+                           "WHERE symbol=%s "
+            self.db.run_query(update_query, stock["curr_price"], float(updated_price), float(updated_low),
                               float(updated_high), float("%.2f" % (updated_price * volume)), stock["symbol"])
         print("Updated Stock Prices")
 
