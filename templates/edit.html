@@ -1,0 +1,57 @@
+{% for row in rows %}
+
+    <table class="table">
+        <tr>
+            <td>
+
+                <p>Stock Name : {{ row.stock_name }}</p>
+
+
+            </td>
+            <td>
+                <p>Current Market Price : {{ row.curr_price }}</p>
+            </td>
+        </tr>
+    </table>
+
+    <div class="container">
+        <form action="{{ url_for('views.edit', stock_id = row.id) }}" method="POST">
+            <div class="form-group mb-3">
+                <label for="stock_name">Name</label>
+                <input
+					type="text"
+					class="form-control"
+					id="stock_name"
+					name="stock_name"
+					placeholder="Name"
+				/>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="stock_price">Price</label>
+                <input
+                        type="number"
+                        class="form-control"
+                        id="stock_price"
+                        name="stock_price"
+                        placeholder="Price"
+
+                />
+            </div>
+            <!-- <div class="form-group mb-3">
+    <label for="amount">Total Amount</label>
+    <input type="text" id="amount" value="" disabled />
+    </div> -->
+            <br/>
+            <button
+                    type="submit"
+                    class="btn btn-primary"
+            >
+                Apply Changes
+            </button>
+        </form>
+    </div>
+
+
+
+{% endfor %}

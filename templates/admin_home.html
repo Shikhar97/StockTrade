@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Admin Home Page</title>
+
+    <link rel="stylesheet" href="static/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="static/css/fontawesome.css"/>
+    <link rel="stylesheet" href="static/css/brands.css"/>
+    <link rel="stylesheet" href="static/css/solid.css"/>
+
+    <link rel="stylesheet" href="static/css/styles.css"/>
+    <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/bootstrap.bundle.min.js"></script>
+    <script src="static/js/index.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400&display=swap" rel="stylesheet">
+
+
+</head>
+<body>
+<div class="d-flex justify-content-between fixed-bottom align-items-center breaking-news bg-white">
+    <marquee class="news-scroll" behavior="scroll" direction="left" onmouseover="this.stop();"
+             onmouseout="this.start();">
+        {% if rows %}
+            {% for row in rows %}
+                <a>{{ row.symbol }} {{ row.curr_price }}</a>
+                <i class="fa-solid fa-circle fa-2xs"></i>
+            {% endfor %}
+        {% endif %}
+    </marquee>
+</div>
+
+<nav class="navbar navbar-expand-lg navbar-scroll fixed-top shadow-0 border-bottom border-dark">
+
+    <div class="container">
+        <a class="nav-link font-weight-bold">STOCK TRADE</a>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <form method="GET" action="{{ url_for('auth.logout') }}">
+                        <input type="submit" class="btn btn-dark ms-3" value="Logout"/>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</nav>
+
+
+
+<div class="container" id="topdiv4">
+    <!-- {% if message %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+    {% endif %} -->
+
+    <div class="card w-75 mb-3 my-3" id="topdiv2">
+        <form class="card-body" action="{{ url_for('views.adminhome') }}" method="POST" enctype="multipart/form-data">
+            <h5 class="card-title">Add New Stock</h5>
+            <div class="form-group">
+                <label for="category">Stock Name</label>
+                <input type="text" class="form-control" name="stock_name" id="stock_name" required>
+            </div>
+            <div class="form-group">
+                <label for="category">Price</label>
+                <input type="text" class="form-control" name="stock_price" id="stock_price">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+{% if rows %}
+    <div class="container">
+        <section class="intro">
+            <div class="gradient-custom-1 h-100">
+                <div class="mask d-flex align-items-center h-100">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-12">
+                                <div class="table-responsive bg-white">
+                                    <table class="table mb-0 " id="table-to-refresh">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Stock</th>
+                                            <th scope="col">Current Price</th>
+                                            <th scope="col">Day High</th>
+                                            <th scope="col">Day Low</th>
+                                            <th scope="col">Open Price</th>
+                                            <th scope="col">Closing Price</th>
+                                            <th scope="col">Market Cap.</th>
+                                            <th scope="col"></th>
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for row in rows %}
+                                            <tr>
+                                                <td style="color: #666666">
+                                                    {{ row.stock_name }}
+                                                </td>
+                                                <td>{{ row.curr_price }}</td>
+                                                <td>{{ row.day_high }}</td>
+                                                <td>{{ row.day_low }}</td>
+                                                <td>{{ row.open_price }}</td>
+                                                <td>{{ row.close_price }}</td>
+                                                <td>{{ row.volume * row.curr_price }}</td>
+
+                                                <td>
+                                                    <button data-id='{{ row.id }}' class="editstock btn btn-dark ms-3">
+                                                        Edit
+                                                    </button>
+                                                </td>
+                                                
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endif %}
+<div class="modal fade" id="empModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit this Stock</h4>
+                <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                ></button>
+
+            </div>
+            <div class="modal-body">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

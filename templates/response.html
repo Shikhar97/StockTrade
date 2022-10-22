@@ -1,0 +1,71 @@
+{% for row in stock_details %}
+    <div class="container">
+        <form action="{{ url_for('views.orders', stock_id = row.id) }}" method="POST">
+                <div class="container">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-12">
+                                <div class="row">
+                                    <div class="col">
+                                        <h4 class="text-center text-dark" style="padding: 5px;">Transaction Type</h4>
+                                    </div>
+                                </div>
+                                <div class="form-check">
+
+                                        <input class="form-check-input" type="radio" id="buy" name="trans_type" value="Buy">
+                                    <label class="form-check-label text-dark" for="buy">Buy</label></div>
+                                <div class="form-check"><input class="form-check-input" type="radio" id="sell" name="trans_type" value="Sell">
+                                    <label class="form-check-label text-dark" for="sell">Sell</label></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-auto col-md-6 col-lg-12 offset-0">
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <h4 class="text-dark" style="padding: 5px;">Order Type</h4>
+                                    </div>
+                                </div>
+                                <div class="form-check"><input class="form-check-input" type="radio" id="market" name="order_type" value="Market" onclick="yesnoCheck()">
+                                    <label class="form-check-label text-dark" for="market">Market</label></div>
+                                <div class="form-check"><input class="form-check-input" type="radio" id="limit" name="order_type" value="Limit" onclick="yesnoCheck()">
+                                    <label class="form-check-label text-dark" for="limit">Limit</label></div>
+                                <div id="ifYes" style="display:none">
+                                <label class="form-label fs-6 text-dark" for="expiry" style="margin: 0px">Order Expiry</label>
+                                <input class="form-control-sm" type="date" name="expiry" id="expiry" style="padding: 5px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <div class="form-group mb-3" style="margin: 25px">
+                    <p style="color: black">Stock Name : {{ row.stock_name }}</p>
+                    <input
+                            type="number"
+                            class="form-control"
+                            id="quantity"
+                            name="quantity"
+                            placeholder="Enter a quantity (Min. 1)"
+                            min="1"
+                    />
+                </div>
+
+                <div class="form-group mb-3" style="margin: 25px">
+                                    <p style="color: black">Current Market Price : $ {{ row.curr_price }}</p>
+
+                    <input
+                            type="number"
+                            class="form-control"
+                            id="price"
+                            name="price"
+                            placeholder="Enter price (Blank = Market Price)"
+
+                    />
+                </div>
+                <br/>
+                <button type="submit" class="btn btn-primary">
+                    Place Order
+                </button>
+        </form>
+    </div>
+
+
+
+{% endfor %}
