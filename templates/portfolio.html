@@ -5,74 +5,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Home</title>
 
-    <link rel="stylesheet" href="static/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="static/css/fontawesome.css" />
-    <link rel="stylesheet" href="static/css/brands.css" />
-    <link rel="stylesheet" href="static/css/solid.css" />
-
-    <link rel="stylesheet" href="static/css/styles.css" />
-    <script src="static/js/jquery.min.js"></script>
-    <script src="static/js/bootstrap.bundle.min.js"></script>
-    <script src="static/js/index.js"></script>
+    <link rel="stylesheet" href="static/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/css/styles.css"/>
   </head>
   <body>
-    <div
-      class="d-flex justify-content-between fixed-bottom align-items-center breaking-news bg-white"
-    >
-      <marquee
-        class="news-scroll"
-        behavior="scroll"
-        direction="left"
-        onmouseover="this.stop();"
-        onmouseout="this.start();"
-      >
-        {% if stock_rows %} {% for row in stock_rows %}
-        <a>{{ row.symbol }} {{ row.curr_price }}</a>
-        <i class="fa-solid fa-circle fa-2xs"></i>
-        {% endfor %} {% endif %}
-      </marquee>
-    </div>
-    <nav
-      class="navbar navbar-expand-lg navbar-scroll fixed-top shadow-0 border-bottom border-dark"
-    >
-      <div class="container">
-        <!-- <a class="navbar-brand" href="#!">STOCK TRADE</a> -->
-        <a class="nav-link font-weight-bold">STOCK TRADE</a>
-        <!-- <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
-            data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-            aria-label="Toggle navigation">
-            <i class="fas fa-bars"></i>
-          </button> -->
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('views.home') }}">Market</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('views.orderpage') }}"
-                >Orders</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('views.portfolio') }}"
-                >Portfolio</a
-              >
-            </li>
-            <li class="nav-item">
-              <form method="GET" action="{{ url_for('auth.login') }}">
-                <input type="submit" class="btn btn-dark ms-3" value="Logout" />
-              </form>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-    <div class="container">
+    <marquee class="news-scroll fixed-bottom" behavior="scroll" direction="left" onmouseover="this.stop();"
+         onmouseout="this.start();">
+    {% if stock_rows %}
+        {% for row in stock_rows %}
+            <a>{{ row.symbol }} {{ row.curr_price }}</a>
+            <i class="fa-solid fa-circle fa-2xs"></i>
+            <span>&nbsp &nbsp &nbsp</span>
+        {% endfor %}
+    {% endif %}
+</marquee>
+    <nav class="navbar navbar-dark navbar-expand-md sticky-top navbar-shrink py-3" id="mainNav">
 
-      <h2>Funds : USD {{funds}} </h2>
-      <button type="button" class="btn btn-dark ms-3 btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">ADD</button>
-      <button type="button" class="btn btn-dark ms-3 btn-primary" data-bs-toggle="modal" data-bs-target="#withdrawModal">WITHDRAW</button>
+    <div class="container">
+        <button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span
+                class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navcol-1">
+            <ul class="navbar-nav mx-auto"></ul>
+        </div>
+        <nav class="navbar navbar-dark navbar-expand-md sticky-top bg-primary navbar-shrink py-3" id="mainNav-1"
+             style="padding-right: 298px;margin-right: 1px;padding-left: 301px;margin-left: -217px;">
+            <div class="container"><a class="navbar-brand d-flex align-items-center" href="/"
+                                      style="margin-right: 400px;"><span
+                    class="bs-icon-sm bs-icon-circle bs-icon-white shadow d-flex justify-content-center align-items-center me-2 bs-icon"
+                    style="margin-left: -100px;"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                                      fill="currentColor" viewBox="0 0 16 16" class="bi bi-bezier">
+                                <path fill-rule="evenodd"
+                                      d="M0 10.5A1.5 1.5 0 0 1 1.5 9h1A1.5 1.5 0 0 1 4 10.5v1A1.5 1.5 0 0 1 2.5 13h-1A1.5 1.5 0 0 1 0 11.5v-1zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zm10.5.5A1.5 1.5 0 0 1 13.5 9h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5v-1zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zM6 4.5A1.5 1.5 0 0 1 7.5 3h1A1.5 1.5 0 0 1 10 4.5v1A1.5 1.5 0 0 1 8.5 7h-1A1.5 1.5 0 0 1 6 5.5v-1zM7.5 4a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1z"></path>
+                                <path d="M6 4.5H1.866a1 1 0 1 0 0 1h2.668A6.517 6.517 0 0 0 1.814 9H2.5c.123 0 .244.015.358.043a5.517 5.517 0 0 1 3.185-3.185A1.503 1.503 0 0 1 6 5.5v-1zm3.957 1.358A1.5 1.5 0 0 0 10 5.5v-1h4.134a1 1 0 1 1 0 1h-2.668a6.517 6.517 0 0 1 2.72 3.5H13.5c-.123 0-.243.015-.358.043a5.517 5.517 0 0 0-3.185-3.185z"></path>
+                            </svg></span><span style="margin-right: 250px;margin-left: 0px;padding-right: 150px;">StockTrade</span></a>
+
+                <div class="collapse navbar-collapse" id="navcol-2">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('views.home') }}">Market</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('views.orderpage') }}">Orders</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('views.portfolio') }}">Portfolio</a></li>
+                    </ul>
+                </div>
+                <form method="GET" action="{{ url_for('auth.logout') }}">
+                    <input type="submit" class="btn btn-light ms-3" value="Logout"/>
+                </form>
+            </div>
+        </nav>
     </div>
+</nav>
+    <section class="py-5">
+        <div class="container py-5">
+            <div class="row mb-5">
+                <div class="col-md-8 col-xl-6 text-center mx-auto">
+                    <p class="fw-bold text-success mb-2"></p>
+                    <h2 class="fw-bold"><strong>Your Portfolio</strong></h2>
+                    <p class="text-muted w-lg-50"></p>
+                </div>
+            </div>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 d-sm-flex justify-content-sm-center">
+                <div class="col mb-4">
+
+                    <p class="bg-dark border rounded border-dark p-4">Funds : $ {{funds}}</p>
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">Add</button>
+      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#withdrawModal">Withdraw</button>
+                </div>
+                <div class="col mb-4">
+                    <div class="d-flex flex-column align-items-center align-items-sm-start"></div>
+                    <p class="bg-dark border rounded border-dark p-4">Invested Value: $ {{ invested_value }}</p>
+                </div>
+                <div class="col mb-4">
+                    <div class="d-flex flex-column align-items-center align-items-sm-start">
+                        <p class="bg-dark border rounded border-dark p-4">Current Value: $ {{ curr_value }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
 
     <!-- The Modal -->
 <div class="modal" id="addModal">
@@ -81,7 +91,7 @@
 
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Add Funds</h4>
+          <h4 class="modal-title text-black">Add Funds</h4>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
 
@@ -90,7 +100,7 @@
 
                 <form action="{{ url_for('views.addfunds') }}" method="POST">
                     <div class="form-group mb-3">
-                        <label for="quantity">Amount</label>
+{#                        <label for="quantity">Amount</label>#}
                         <input
                                 type="number"
                                 class="form-control"
@@ -124,16 +134,15 @@
 
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Withdraw Funds</h4>
+          <h4 class="modal-title text-black">Withdraw Funds</h4>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
 
         <!-- Modal body -->
         <div class="modal-body">
-            <p>Availabe funds to withdraw : USD {{funds}} </p>
+            <p class="text-black">Available funds to withdraw : $ {{funds}} </p>
             <form action="{{ url_for('views.withdrawfunds') }}" method="POST">
                 <div class="form-group mb-3">
-                    <label for="quantity">Amount</label>
                     <input
                             type="number"
                             class="form-control"
@@ -160,6 +169,11 @@
       </div>
     </div>
   </div>
+<script src="static/assets/js/jquery.min.js"></script>
+<script src="static/assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="static/assets/js/script.min.js"></script>
+<script src="static/js/index.js"></script>
 
   </body>
+
 </html>

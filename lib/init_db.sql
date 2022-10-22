@@ -73,6 +73,7 @@ CREATE TABLE pending_orders (
     user_id INTEGER NOT NULL,
     trans_type VARCHAR NOT NULL,
     quantity INTEGER NOT NULL,
+    order_type VARCHAR NOT NULL ,
     limit_price FLOAT NOT NULL ,
     triggered BOOL DEFAULT FALSE,
     expiry_date DATE DEFAULT CURRENT_DATE,

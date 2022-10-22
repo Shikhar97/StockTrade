@@ -22,6 +22,11 @@ def home():
     return redirect(url_for('auth.login'))
 
 
+@views.route("/update_price", methods=["GET"])
+def update_content():
+    stock_details = db_obj.run_query("SELECT * FROM stocks ORDER BY id")
+    return jsonify({'html_response': render_template('update_table.html', rows=stock_details)})
+
 @views.route('/adminhome', methods=["GET", "POST"], endpoint='adminhome')
 def adminhome():
     rows = db_obj.run_query('SELECT * FROM stocks')
@@ -81,7 +86,7 @@ def orders(stock_id):
                     db_obj.run_query(update_fund, new_funds, session["id"])
             else:
                 stock_data = db_obj.run_query('SELECT SUM(quantity) FROM transaction_his WHERE user_id=%s AND '
-                                             'stock_id=%s AND trans_type=%s', session['id'], stock_id, "Buy")
+                                              'stock_id=%s AND trans_type=%s', session['id'], stock_id, "Buy")
                 if stock_data[0]["sum"] is None or quantity > stock_data[0]["sum"]:
                     flash('Not enough shares to sell', category='error')
                     return redirect(url_for('views.orderpage'))
@@ -105,14 +110,7 @@ def orders(stock_id):
                     "VALUES (%s,%s,%s,%s,%s,%s)",
                     stock_id, user_id, quantity, price, trans_type, order_type)
 
-            return redirect(url_for('views.orderpage'))
-
-        else:
-            transaction_rows = db_obj.run_query('SELECT * FROM transaction_his')
-            pending_rows = db_obj.run_query('SELECT * FROM pending_orders')
-            stock_rows = db_obj.run_query('SELECT * FROM stocks ORDER BY id ASC')
-            return render_template("orders.html", rows=transaction_rows, stock_rows=stock_rows,
-                                   pending_orders=pending_rows)
+        return redirect(url_for('views.orderpage'))
     else:
         return render_template("home.html")
 
@@ -132,7 +130,8 @@ def portfolio():
         db_obj.run_query(update_query, round(invested_value, 2), session["id"])
         fund = db_obj.run_query("SELECT * FROM user_portfolio WHERE user_id=%s", session["id"])
         stock_rows = db_obj.run_query('SELECT * FROM stocks ORDER BY id ASC')
-        return render_template("portfolio.html", funds=round(fund[0]["funds"],2), stock_rows=stock_rows)
+        return render_template("portfolio.html", funds=round(fund[0]["funds"], 2), stock_rows=stock_rows,
+                               invested_value=fund[0]["invested_value"], curr_value=stock_rows[0]["curr_price"])
     return redirect(url_for('views.home'))
 
 
@@ -140,12 +139,14 @@ def portfolio():
 def orderpage():
     if 'loggedin' in session:
         user_id = session['id']
-        sql = "SELECT * " \
-              "FROM stocks INNER JOIN transaction_his ON stocks.id = transaction_his.stock_id " \
-              "WHERE transaction_his.user_id = %s ORDER BY order_id DESC"
-        rows = db_obj.run_query(sql, user_id)
+        transac_rows = "SELECT * " \
+                       "FROM stocks INNER JOIN transaction_his ON stocks.id = transaction_his.stock_id " \
+                       "WHERE transaction_his.user_id = %s ORDER BY order_id DESC"
+        rows = db_obj.run_query(transac_rows, user_id)
         stock_rows = db_obj.run_query('SELECT * FROM stocks ORDER BY id ASC')
-        pending_rows = db_obj.run_query('SELECT * FROM pending_orders')
+        pending_rows = db_obj.run_query("SELECT * FROM stocks "
+                                        "INNER JOIN pending_orders ON stocks.id = pending_orders.stock_id "
+                                        "WHERE pending_orders.user_id = %s ORDER BY order_id DESC", user_id)
         return render_template("orders.html", rows=rows, stock_rows=stock_rows, pending_orders=pending_rows)
     return redirect(url_for('views.home'))
 
@@ -160,8 +161,6 @@ def addfunds():
             for row in results:
                 funds = (row['funds'])
                 fundsadded = float(fundsadded) + funds
-                # print(fundsadded)
-                # print(type(fundsadded))
                 update_query = "UPDATE user_portfolio SET funds = %s WHERE user_id = %s"
                 db_obj.run_query(update_query, fundsadded, user_id)
             return redirect(url_for('views.portfolio'))
@@ -195,6 +194,21 @@ def ajaxfile():
     return jsonify({'htmlresponse': render_template('response.html', stock_details=stock_details)})
 
 
+@views.route("/cancelorder/<int:order_id>", methods=["POST", "GET"])
+def cancel_pending_order(order_id):
+    if "loggedin" in session:
+        del_query = "DELETE FROM pending_orders WHERE order_id=%s"
+        get_query = "SELECT * FROM pending_orders WHERE order_id=%s"
+        output = db_obj.run_query(get_query, order_id)
+        user_data = db_obj.run_query('SELECT * FROM user_portfolio WHERE user_id=%s', output["user_id"])
+        new_funds = user_data[0]["funds"] + output["price"] * output["quantity"]
+        update_fund = "UPDATE user_portfolio SET funds=%s WHERE user_id=%s"
+        db_obj.run_query(update_fund, new_funds, output["user_id"])
+        db_obj.run_query(del_query, order_id)
+        return redirect(url_for('views.orderpage'))
+    return redirect(url_for('views.home'))
+
+
 @views.route("/edit", methods=["POST", "GET"])
 def ajaxfileedit():
     rows = {}
@@ -202,3 +216,15 @@ def ajaxfileedit():
         stock_id = request.form['id']
         rows = db_obj.run_query("SELECT * FROM stocks WHERE id = %s", stock_id)
     return jsonify({'htmlresponse': render_template('edit.html', rows=rows)})
+
+
+def get_stock_user():
+    if "loggedin" in session:
+        stock_list = "SELECT DISTINCT stock_id FROM transaction_his WHERE user_id=%s"
+        count = "SELECT sum(case when trans_type='Buy' then quantity else - quantity end) as cnt " \
+                "FROM transaction_his  WHERE user_id =1 AND stock_id=1;"
+        get_query = "SELECT * FROM stocks INNER JOIN transaction_his ON stocks.id = transaction_his.stock_id " \
+                    "WHERE transaction_his.user_id = %s AND stock_id=%s ORDER BY order_id DESC"
+        stock_list_output = db_obj.run_query(stock_list, session["id"])
+        for stock in stock_list_output:
+            output = db_obj.run_query(get_query, session["id"], stock["stock_id"])

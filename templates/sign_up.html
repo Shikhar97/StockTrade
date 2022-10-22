@@ -1,94 +1,111 @@
 {% extends "base.html" %}
 {% block title %}Signin{% endblock %}
 {% block content %}
-<h1 class="my-3 mx-3">Create your account!</h1>
-
-
-<!-- <div class="container">
-    <form method="POST">
-        <div class="mb-3">
-          <label for="email" class="form-label">Email address</label>
-          <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
-          <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+    <section class="py-5">
+        <div class="container py-5">
+            <div class="row mb-4 mb-lg-5">
+                <div class="col-md-8 col-xl-6 text-center mx-auto">
+                    <h2 class="fw-bold text-success mb-2">Sign up</h2>
+                    <h2 class="fw-bold">Welcome</h2>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-6 col-xl-4">
+                    <div class="card">
+                        <div class="card-body text-center d-flex flex-column align-items-center">
+{#                            <div class="bs-icon-xl bs-icon-circle bs-icon-primary shadow bs-icon my-4">#}
+{#                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"#}
+{#                                     viewBox="0 0 16 16" class="bi bi-person">#}
+{#                                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"></path>#}
+{#                                </svg>#}
+{#                            </div>#}
+                            <form method="post">
+                                <div class="mb-3"><input class="form-control" id="email" type="email" name="email"
+                                                         placeholder="Email"></div>
+                                <div class="mb-3"><input class="form-control" id="name" type="text" name="name"
+                                                         placeholder="Username"></div>
+                                <div class="mb-3"><input class="form-control" id="password1" type="password"
+                                                         name="password1"
+                                                         placeholder="Password"></div>
+                                <div class="mb-3"><input class="form-control" id="password2" type="password"
+                                                         name="password2"
+                                                         placeholder="Confirm Password"></div>
+                                <div class="mb-3">
+                                    <select name="accountType" class="form-select">
+                                    <optgroup label="Account Type">
+                                        <option value="User" selected>User</option>
+                                        <option value="Admin">Admin</option>
+                                    </optgroup>
+                                </select>
+                                </div>
+                                <div class="mb-3">
+                                    <button class="btn btn-primary shadow d-block w-100" type="submit">Sign up</button>
+                                </div>
+                                <p class="text-muted">Already have an account?&nbsp;<a
+                                        href="{{ url_for('auth.login') }}">Log in</a></p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+    </section>
 
-        <div class="mb-3">
-            <label for="name" class="form-label">Name</label>
-            <input type="text" class="form-control" id="name">
-           
-        </div>
-
-        <div class="mb-3">
-          <label for="password1" class="form-label">Password</label>
-          <input type="password" class="form-control" id="password1">
-        </div>
-
-        <div class="mb-3">
-            <label for="password2" class="form-label"> Confirm Password</label>
-            <input type="password" class="form-control" id="password2">
-          </div>
-       
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
-</div> -->
-
-
-<form class = "form-inline" method="POST" >
-    
-    <div class="form-group mb-3">
-      <label for="email">Email Address</label>
-      <input
-        type="email"
-        class="form-control"
-        id="email"
-        name="email"
-        placeholder="Enter email"
-      />
-    </div>
-    <div class="form-group mb-3">
-      <label for="name">Name</label>
-      <input
-        type="text"
-        class="form-control"
-        id="name"
-        name="name"
-        placeholder="Enter name"
-      />
-    </div>
-    <div class="form-group mb-3 ">
-      <label class="my-1 mr-2" for="accountType">Account Type</label>
-      <select  name="accountType" class="custom-select my-1 mr-sm-2" >
-        <option value = "User" selected>User</option>
-        <option value = "Admin">Admin</option>
-      </select>
-    </div>
-    <div class="form-group mb-3">
-      <label for="password1">Password</label>
-      <input
-        type="password"
-        class="form-control"
-        id="password1"
-        name="password1"
-        placeholder="Enter password"
-      />
-    </div>
-    
-    
-
-    <div class="form-group mb-3">
-      <label for="password2">Confirm Password</label>
-      <input
-        type="password"
-        class="form-control"
-        id="password2"
-        name="password2"
-        placeholder="Confirm password"
-      />
-    </div>
-
-    <br />
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+    {#    <form class="form-inline" method="POST">#}
+    {##}
+    {#        <div class="form-group mb-3">#}
+    {#            <label for="email">Email Address</label>#}
+    {#            <input#}
+    {#                    type="email"#}
+    {#                    class="form-control"#}
+    {#                    id="email"#}
+    {#                    name="email"#}
+    {#                    placeholder="Enter email"#}
+    {#            />#}
+    {#        </div>#}
+    {#        <div class="form-group mb-3">#}
+    {#            <label for="name">Name</label>#}
+    {#            <input#}
+    {#                    type="text"#}
+    {#                    class="form-control"#}
+    {#                    id="name"#}
+    {#                    name="name"#}
+    {#                    placeholder="Enter name"#}
+    {#            />#}
+    {#        </div>#}
+    {#        <div class="form-group mb-3 ">#}
+    {#            <label class="my-1 mr-2" for="accountType">Account Type</label>#}
+    {#            <select name="accountType" class="custom-select my-1 mr-sm-2">#}
+    {#                <option value="User" selected>User</option>#}
+    {#                <option value="Admin">Admin</option>#}
+    {#            </select>#}
+    {#        </div>#}
+    {#        <div class="form-group mb-3">#}
+    {#            <label for="password1">Password</label>#}
+    {#            <input#}
+    {#                    type="password"#}
+    {#                    class="form-control"#}
+    {#                    id="password1"#}
+    {#                    name="password1"#}
+    {#                    placeholder="Enter password"#}
+    {#            />#}
+    {#        </div>#}
+    {##}
+    {##}
+    {#        <div class="form-group mb-3">#}
+    {#            <label for="password2">Confirm Password</label>#}
+    {#            <input#}
+    {#                    type="password"#}
+    {#                    class="form-control"#}
+    {#                    id="password2"#}
+    {#                    name="password2"#}
+    {#                    placeholder="Confirm password"#}
+    {#            />#}
+    {#        </div>#}
+    {##}
+    {#        <br/>#}
+    {#        <button type="submit" class="btn btn-primary">Submit</button>#}
+    {#    </form>#}
 
 
 {% endblock %}

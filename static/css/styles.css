@@ -1,14 +1,13 @@
 body {
-    padding-top: 70px;
     font-family: 'Open Sans', sans-serif;
 }
 
 .modal-content {
-    width: fit-content;
+    /*width: fit-content;*/
 }
 
 .mb-0 > thead {
-    background-color: #d1cdcd;
+    background-color: #efefef;
 }
 
 .button {
@@ -28,53 +27,7 @@ body {
     top: 100px;
 }
 
-/* Color of the links BEFORE scroll */
-.navbar-scroll .nav-link,
-.navbar-scroll .navbar-toggler-icon,
-.navbar-scroll .navbar-brand {
-    color: white;
-}
 
-/* Color of the navbar BEFORE scroll */
-.navbar-scroll {
-    background-color: black;
-
-}
-
-/* Color of the links AFTER scroll */
-.navbar-scrolled .nav-link,
-.navbar-scrolled .navbar-toggler-icon,
-.navbar-scroll .navbar-brand {
-    color: white;
-}
-
-/* Color of the navbar AFTER scroll */
-.navbar-scrolled {
-    background-color: rgb(206, 143, 143);
-}
-
-/* An optional height of the navbar AFTER scroll */
-.navbar.navbar-scroll.navbar-scrolled {
-    padding-top: inherit;
-    padding-bottom: inherit;
-}
-
-.navbar-brand {
-    font-size: unset;
-    height: 3.5rem;
-}
-
-nav {
-    position: fixed;
-    z-index: 1000;
-    background-color: #222;
-    opacity: 100;
-    filter: alpha(opacity=50);
-    box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.4);
-}
-
-html,
-body,
 .intro {
     height: 100%;
 }
@@ -142,6 +95,9 @@ body,
 }
 
 table thead {
+    background-color: #bdbdbd;
+    opacity: 1;
+    color: black;
     position: sticky;
     inset-block-start: 0;
 }
