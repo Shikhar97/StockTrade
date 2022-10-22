@@ -65,6 +65,7 @@
                                             <th scope="col">Day Low</th>
                                             <th scope="col">Open Price</th>
                                             <th scope="col">Closing Price</th>
+                                            <th scope="col">Volume</th>
                                             <th scope="col">Market Cap.</th>
                                             <th scope="col"></th>
 
@@ -81,10 +82,11 @@
                                                 <td>{{ row.day_low }}</td>
                                                 <td>{{ row.open_price }}</td>
                                                 <td>{{ row.close_price }}</td>
-                                                <td>{{ row.volume * row.curr_price }}</td>
+                                                <td>{{ row.volume }}</td>
+                                                <td>{{ row.mark_cap}}</td>
 
                                                 <td>
-                                                    <button data-id='{{ row.id }}' class="userinfo btn btn-dark ms-3">
+                                                    <button style="padding: 0px; height: 30px; width: 100px;" data-id='{{ row.id }}' class="userinfo btn btn-dark ms-3">
                                                         Buy/Sell
                                                     </button>
                                                 </td>

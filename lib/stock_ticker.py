@@ -2,7 +2,6 @@ import datetime
 import random
 
 from stocksymbol import StockSymbol
-from lib.db import DB
 
 
 def get_price(init_value, change_factor=0.007):
@@ -11,11 +10,11 @@ def get_price(init_value, change_factor=0.007):
 
 
 class StockList:
-    def __init__(self):
+    def __init__(self, db_obj):
         self.api_key = 'ab43c7ee-4009-4e4f-83a4-cf41c59dd486'
         self.ss = StockSymbol(self.api_key)
         self.symbol_list_us = self.ss.get_symbol_list(index="NDX")
-        self.db = DB("admin", "admin", "stock_trade")
+        self.db = db_obj
 
     def initialize_db(self):
         for stock in self.symbol_list_us:
@@ -46,7 +45,7 @@ class StockList:
                 updated_low = updated_price
             update_query = "UPDATE stocks SET curr_price=%s, day_low=%s, day_high=%s, mark_cap=%s WHERE symbol=%s"
             self.db.run_query(update_query, float(updated_price), float(updated_low),
-                              float(updated_high), round(updated_price * volume, 2), stock["symbol"])
+                              float(updated_high), float("%.2f" % (updated_price * volume)), stock["symbol"])
         print("Updated Stock Prices")
 
     def update_pending_orders(self):

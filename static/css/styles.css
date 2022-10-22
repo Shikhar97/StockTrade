@@ -95,7 +95,8 @@ body {
 }
 
 table thead {
-    background-color: #bdbdbd;
+        background-color: #efefef;
+
     opacity: 1;
     color: black;
     position: sticky;
@@ -186,4 +187,10 @@ tbody td {
   margin: 0;
   padding: 0;
   cursor: pointer;
+}
+
+.material-symbols-outlined {
+  font-size: 100px;
+
+
 }

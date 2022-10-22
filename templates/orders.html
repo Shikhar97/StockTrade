@@ -7,8 +7,10 @@
     <title>Orders</title>
 
     <link rel="stylesheet" href="static/assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="static/css/styles.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+    <link rel="stylesheet" href="static/css/styles.css"/>
 </head>
 <body>
 <marquee class="news-scroll fixed-bottom" behavior="scroll" direction="left" onmouseover="this.stop();"
@@ -55,13 +57,14 @@
         </nav>
     </div>
 </nav>
-{% if rows or pending_orders %}
     <section class="py-5">
         <div class="container py-5">
             <div class="row mb-5">
-                <div class="col">
-                    <div class="table-responsive" style="height:300px; overflow-y:scroll;">
-                        <table class="table bg-white">
+                <div class="ol-md-8 col-xl-6 text-center mx-auto">
+                <h2 class="fw-bold"><strong>Transaction History</strong></h2>
+                    <div class="table-responsive bg-white" style="height:300px; overflow-y:scroll;">
+                    {% if rows %}
+                        <table class="table">
                             <thead>
                             <tr>
                                 <th scope="col">Stock</th>
@@ -69,14 +72,12 @@
                                 <th scope="col">Price(USD)</th>
                                 <th scope="col">Order Type</th>
                                 <th scope="col">Transaction Type</th>
-
-
                             </tr>
                             </thead>
                             <tbody>
                             {% for row in rows %}
                                 <tr>
-                                    <td >
+                                    <td>
                                         {{ row.symbol }}
                                     </td>
                                     <td>{{ row.quantity }}</td>
@@ -87,23 +88,29 @@
                             {% endfor %}
                             </tbody>
                         </table>
+                    {% else %}
+                        <div class="d-flex flex-column align-items-center text-black">
+                            <span class="material-symbols-outlined">analytics</span>
+                            <h2>No records found</h2>
+
+                        </div>
+                    {% endif %}
                     </div>
-
-
                 </div>
                 <div class="col-md-8 col-xl-6 text-center mx-auto">
+                <h2 class="fw-bold"><strong>Pending Orders(Limit Orders)</strong></h2>
                     <div class="table-responsive bg-white" style="height:300px; overflow-y:scroll;">
+                     {% if pending_orders %}
+
                         <table class="table">
                             <thead>
                             <tr>
                                 <th scope="col">Stock</th>
                                 <th scope="col">Volume</th>
                                 <th scope="col">Price(USD)</th>
-                                <th scope="col">Order Type</th>
                                 <th scope="col">Transaction Type</th>
                                 <th scope="col">Order Expiry</th>
-
-
+                                <th scope="col"></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -114,19 +121,29 @@
                                     </td>
                                     <td>{{ od.quantity }}</td>
                                     <td>{{ od.limit_price }}</td>
-                                    <td>{{ od.order_type }}</td>
                                     <td>{{ od.trans_type }}</td>
                                     <td>{{ od.expiry_date }}</td>
+                                    <td>
+                                        <button style="padding: 0px; height: 30px; width: 100px;" data-id='{{ od.order_id }}' class="userinfo btn btn-dark ms-3">
+                                            Cancel
+                                        </button>
+                                    </td>
                                 </tr>
                             {% endfor %}
                             </tbody>
                         </table>
+                     {% else %}
+                        <div class="d-flex flex-column align-items-center text-black">
+                            <span class="material-symbols-outlined">analytics</span>
+                            <h2>No records found</h2>
+
+                        </div>
+                         {% endif %}
                     </div>
                 </div>
             </div>
         </div>
     </section>
-{% endif %}
 
 
 {% with messages = get_flashed_messages(with_categories=true) %} {% if

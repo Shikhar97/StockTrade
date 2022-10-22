@@ -16,6 +16,16 @@ function refreshTable(){
         });
     }
 
+function checkmarket(){
+        $.ajax({
+            url: '/markettimecheck',
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                console.log(response)
+            }
+        });
+    }
 
 $(document).ready(function () {
     $('.editstock').click(function(){
@@ -44,5 +54,10 @@ $(document).ready(function () {
             }
         });
     });
+
+
+
+
     setInterval(refreshTable, 5000);
+    setInterval(checkmarket, 5000);
 });

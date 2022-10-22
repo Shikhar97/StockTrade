@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from flask import flash
 from flask import Blueprint, render_template, request, session, redirect, url_for, jsonify
 from lib.db import DB
@@ -26,6 +26,7 @@ def home():
 def update_content():
     stock_details = db_obj.run_query("SELECT * FROM stocks ORDER BY id")
     return jsonify({'html_response': render_template('update_table.html', rows=stock_details)})
+
 
 @views.route('/adminhome', methods=["GET", "POST"], endpoint='adminhome')
 def adminhome():
@@ -69,12 +70,12 @@ def orders(stock_id):
         if request.method == "POST":
             user_data = db_obj.run_query('SELECT * FROM user_portfolio WHERE user_id=%s', session['id'])
             quantity = float(request.form.get('quantity'))
+            trans_type = request.form.get("trans_type")
             if request.form.get('price') == "":
                 rows = db_obj.run_query('SELECT * FROM stocks WHERE id=%s', stock_id)
                 price = rows[0]["curr_price"]
             else:
                 price = float(request.form.get('price'))
-            trans_type = request.form.get("trans_type")
             if trans_type == "Buy":
                 if price * quantity > user_data[0]["funds"]:
                     flash('Not enough funds', category='error')
@@ -130,8 +131,13 @@ def portfolio():
         db_obj.run_query(update_query, round(invested_value, 2), session["id"])
         fund = db_obj.run_query("SELECT * FROM user_portfolio WHERE user_id=%s", session["id"])
         stock_rows = db_obj.run_query('SELECT * FROM stocks ORDER BY id ASC')
+        stock_data = "SELECT symbol, SUM(case when trans_type='Buy' then quantity else - quantity end) as stock_count " \
+                     "FROM transaction_his  INNER JOIN stocks on stocks.id = transaction_his.stock_id " \
+                     "WHERE user_id =%s GROUP BY symbol"
+        stock_list_output = db_obj.run_query(stock_data, session["id"])
         return render_template("portfolio.html", funds=round(fund[0]["funds"], 2), stock_rows=stock_rows,
-                               invested_value=fund[0]["invested_value"], curr_value=stock_rows[0]["curr_price"])
+                               invested_value=fund[0]["invested_value"], curr_value=stock_rows[0]["curr_price"],
+                               stock_info=stock_list_output)
     return redirect(url_for('views.home'))
 
 
@@ -177,8 +183,6 @@ def withdrawfunds():
             for row in results:
                 funds = (row['funds'])
                 funds = funds - float(amt)
-                # print(fundsadded)
-                # print(type(fundsadded))
                 update_query = "UPDATE user_portfolio SET funds = %s WHERE user_id = %s"
                 db_obj.run_query(update_query, funds, user_id)
             return redirect(url_for('views.portfolio'))
@@ -218,13 +222,13 @@ def ajaxfileedit():
     return jsonify({'htmlresponse': render_template('edit.html', rows=rows)})
 
 
-def get_stock_user():
-    if "loggedin" in session:
-        stock_list = "SELECT DISTINCT stock_id FROM transaction_his WHERE user_id=%s"
-        count = "SELECT sum(case when trans_type='Buy' then quantity else - quantity end) as cnt " \
-                "FROM transaction_his  WHERE user_id =1 AND stock_id=1;"
-        get_query = "SELECT * FROM stocks INNER JOIN transaction_his ON stocks.id = transaction_his.stock_id " \
-                    "WHERE transaction_his.user_id = %s AND stock_id=%s ORDER BY order_id DESC"
-        stock_list_output = db_obj.run_query(stock_list, session["id"])
-        for stock in stock_list_output:
-            output = db_obj.run_query(get_query, session["id"], stock["stock_id"])
+@views.route("/markettimecheck", methods=["POST", "GET"])
+def market_time():
+    rows = {}
+    today_day = datetime.today().strftime("%A")
+    output = db_obj.run_query("SELECT * FROM market_hour WHERE day_name=%s", today_day)
+    to_time = output["to_time"]
+    from_time = output["from_time"]
+    if datetime.strptime(from_time, "%H:%M:%S") < datetime.now() < datetime.strptime(to_time, "%H:%M:%S"):
+        return True
+    return False

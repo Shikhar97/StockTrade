@@ -16,12 +16,10 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form['password1']
-        # print(password)
         # Check if account exists using MySQL
         user = db_obj.run_query('SELECT * FROM users WHERE email = %s', email)
         admin = db_obj.run_query('SELECT * FROM admin_users WHERE email = %s', email)
         # Fetch one record and return result
-        # user=db.session.query(User).filter(User.email==email)
         if user:
             password_rs = user[0]['password']
             # If account exists in users table in out database
@@ -58,18 +56,11 @@ def login():
 @auth.route('/logout')
 def logout():
     # Remove session data, this will log the user out
-    # session["loggedin"] = None
-    # session["id"] = None
-    # session["email"] = None
     session.clear()
     if 'loggedin' in session:
         print("logged in even after clicking logout")
     else:
         print("locked out")
-    # session.pop('loggedin', None)
-    # session.pop('id', None)
-    # session.pop('email', None)
-    # Redirect to login page
     return redirect(url_for('auth.login'))
 
 
@@ -83,16 +74,11 @@ def sign_up():
         email = request.form.get('email')
         account_type = request.form.get('accountType')
         account_type = str(account_type)
-        
-
-        # print(str(account_type))
-        # print(type(account_type))
         _hashed_password = generate_password_hash(password1)
 
         # Check if account exists using MySQL
         usercheck = db_obj.run_query('SELECT * FROM users WHERE email = %s', email)
         admincheck = db_obj.run_query('SELECT * FROM admin_users WHERE email = %s', email)
-        # print(admincheck)
         if usercheck:
             flash('User already exists.', category='error')
         elif admincheck:
@@ -148,8 +134,3 @@ def admin():
             flash('Email does not exist!', category='error')
 
     return render_template("admin.html")
-
-
-@auth.route('/test', methods=['GET', 'POST'])
-def test():
-    return render_template("rough.html")
