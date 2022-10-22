@@ -86,9 +86,9 @@ CREATE TABLE pending_orders (
 );
 
 CREATE TABLE market_hour (
-  day_name VARCHAR NOT NULL UNIQUE ,
-  to_time TIME NOT NULL ,
-  from_time TIME NOT NULL
+  day_name VARCHAR NOT NULL UNIQUE ,  
+  from_time TIME NOT NULL,
+  to_time TIME NOT NULL 
 );
 
 -- Creating Triggers

@@ -1,4 +1,5 @@
-from datetime import datetime
+from datetime import datetime as date
+from faulthandler import disable
 from flask import flash
 from flask import Blueprint, render_template, request, session, redirect, url_for, jsonify
 from lib.db import DB
@@ -10,59 +11,45 @@ DB_USER = "admin"
 DB_PASS = "admin"
 db_obj = DB(DB_USER, DB_PASS, DB_NAME)
 
+disable = False
 
+
+#User : Home page 
 @views.route('/')
 def home():
     # Check if user is loggedin
     if 'loggedin' in session:
-        # User is Logged-in show them the home page
-        print("logged in on home page")
+        # If User is Logged-in show them the home page
         rows = db_obj.run_query('SELECT * FROM stocks ORDER BY id ASC')
-        return render_template("home.html", rows=rows)
+        return render_template("home.html", rows=rows,disable=disable)
     return redirect(url_for('auth.login'))
 
 
+#AJAX Query to update stock prices every 10 seconds
 @views.route("/update_price", methods=["GET"])
 def update_content():
     stock_details = db_obj.run_query("SELECT * FROM stocks ORDER BY id")
-    return jsonify({'html_response': render_template('update_table.html', rows=stock_details)})
+    print("rendering table")
+    return jsonify({'html_response': render_template('update_table.html', rows=stock_details,disable=disable)})
 
 
+#Admin : Create new stocks
 @views.route('/adminhome', methods=["GET", "POST"], endpoint='adminhome')
-def adminhome():
-    rows = db_obj.run_query('SELECT * FROM stocks')
-    # Check if user is loggedin
+def adminhome():    
+    # Check if admin is loggedin
     if 'loggedin' in session:
         if request.method == "POST":
             name = request.form.get('stock_name')
-            price = request.form.get('stock_price')
-            db_obj.run_query("INSERT INTO stocks (stock_name,curr_price) VALUES (%s,%s)", name, price)
-            rows = db_obj.run_query('SELECT * FROM stocks')
-            return render_template("admin_home.html", message="Stock added successfully", rows=rows)
-        return render_template("admin_home.html", rows=rows)
+            price = request.form.get('stock_price')            
+            symbol = request.form.get('stock_symbol')            
+            volume = request.form.get('stock_volume')            
+            db_obj.run_query("INSERT INTO stocks (symbol,stock_name,curr_price,volume) VALUES (%s,%s,%s,%s)", symbol, name, price, volume)
+        return render_template("admin_home.html")
     else:
         return redirect(url_for('auth.login'))
 
 
-# when edit product option is selected this function is loaded
-@views.route("/edit/<int:stock_id>", methods=["GET", "POST"], endpoint='edit')
-def edit(stock_id):
-    result = {}
-    # Check if user is loggedin
-    if 'loggedin' in session:
-        # result = db_obj.run_query('SELECT * FROM stocks WHERE id = %s', stock_id)
-        if request.method == "POST":
-            name = request.form.get("stock_name")
-            price = request.form.get("stock_price")
-            update_query = "UPDATE stocks SET stock_name = %s, curr_price = %s WHERE id = %s"
-            db_obj.run_query(update_query, name, price, stock_id)
-            rows = db_obj.run_query('SELECT * FROM stocks')
-            return render_template("admin_home.html", rows=rows, message="Product edited")
-
-    return redirect(url_for('views.adminhome'))
-
-
-# when edit product option is selected this function is loaded
+#User : when order is placed
 @views.route("/orders/<int:stock_id>", methods=["GET", "POST"])
 def orders(stock_id):
     if 'loggedin' in session:
@@ -100,7 +87,7 @@ def orders(stock_id):
             order_type = request.form.get("order_type")
 
             if order_type == "Limit":
-                order_expiry = datetime.datetime.strptime(request.form.get("expiry"), "%Y-%m-%d")
+                order_expiry = date.strptime(request.form.get("expiry"), "%Y-%m-%d")
                 db_obj.run_query(
                     "INSERT INTO pending_orders (stock_id,user_id,quantity,limit_price, trans_type, expiry_date) "
                     "VALUES (%s,%s,%s,%s,%s,%s)",
@@ -115,7 +102,7 @@ def orders(stock_id):
     else:
         return render_template("home.html")
 
-
+#User : Portfolio has info about cash, funds etc.
 @views.route("/portfolio", methods=["POST", "GET"])
 def portfolio():
     if 'loggedin' in session:
@@ -140,7 +127,7 @@ def portfolio():
                                stock_info=stock_list_output)
     return redirect(url_for('views.home'))
 
-
+#User: Pending orders and transaction history
 @views.route("/orderpage", methods=["POST", "GET"])
 def orderpage():
     if 'loggedin' in session:
@@ -156,7 +143,7 @@ def orderpage():
         return render_template("orders.html", rows=rows, stock_rows=stock_rows, pending_orders=pending_rows)
     return redirect(url_for('views.home'))
 
-
+#User: Adding funds to buy stocks
 @views.route("/addfunds", methods=["POST", "GET"])
 def addfunds():
     if 'loggedin' in session:
@@ -172,7 +159,7 @@ def addfunds():
             return redirect(url_for('views.portfolio'))
     return redirect(url_for('views.home'))
 
-
+#User: Withdraw funds to cash
 @views.route("/withdrawfunds", methods=["POST", "GET"])
 def withdrawfunds():
     if 'loggedin' in session:
@@ -188,7 +175,7 @@ def withdrawfunds():
             return redirect(url_for('views.portfolio'))
     return redirect(url_for('views.home'))
 
-
+#User: Modal for buying/selling stocks
 @views.route("/buysell", methods=["POST", "GET"])
 def ajaxfile():
     stock_details = {}
@@ -198,6 +185,7 @@ def ajaxfile():
     return jsonify({'htmlresponse': render_template('response.html', stock_details=stock_details)})
 
 
+#User: Cancel a pending order
 @views.route("/cancelorder/<int:order_id>", methods=["POST", "GET"])
 def cancel_pending_order(order_id):
     if "loggedin" in session:
@@ -213,22 +201,41 @@ def cancel_pending_order(order_id):
     return redirect(url_for('views.home'))
 
 
-@views.route("/edit", methods=["POST", "GET"])
-def ajaxfileedit():
-    rows = {}
-    if request.method == 'POST':
-        stock_id = request.form['id']
-        rows = db_obj.run_query("SELECT * FROM stocks WHERE id = %s", stock_id)
-    return jsonify({'htmlresponse': render_template('edit.html', rows=rows)})
 
-
-@views.route("/markettimecheck", methods=["POST", "GET"])
-def market_time():
-    rows = {}
-    today_day = datetime.today().strftime("%A")
+#AJAX query to check market hours
+@views.route("/markettimecheck", methods=["GET"])
+def check_market_time():    
+    today_day = date.today().strftime("%A")
     output = db_obj.run_query("SELECT * FROM market_hour WHERE day_name=%s", today_day)
-    to_time = output["to_time"]
-    from_time = output["from_time"]
-    if datetime.strptime(from_time, "%H:%M:%S") < datetime.now() < datetime.strptime(to_time, "%H:%M:%S"):
-        return True
-    return False
+    current_time = date.now().strftime("%H:%M")
+    for row in output:
+        to_time = row['to_time'].strftime('%H:%M')
+        from_time = row['from_time'].strftime('%H:%M')
+        d1 = date.strptime(current_time, '%H:%M')
+        d2 = date.strptime(from_time, '%H:%M')
+        d3 = date.strptime(to_time, '%H:%M')    
+        global disable    
+        if (d2 < d1 and d1 < d3) or (d2 > d1 and d1 > d3):
+            disable = False
+            print("Valid market hours")
+        else:            
+            disable = True
+            print("Invalid")
+    stock_details = db_obj.run_query("SELECT * FROM stocks ORDER BY id")
+    return jsonify({'time_response': render_template('update_table.html', rows=stock_details,disable=disable)})
+    
+
+
+
+#Admin: edits market hours
+@views.route("/editmarkettime", methods=["POST", "GET"])
+def market_hours():
+    if 'loggedin' in session:
+        if request.method == "POST":
+            day = request.form.get('day')
+            from_time = request.form.get('from_time')
+            to_time = request.form.get('to_time')            
+            update_query = "UPDATE market_hour SET from_time = %s, to_time = %s WHERE day_name = %s"
+            db_obj.run_query(update_query, from_time, to_time, day)
+            print("Market hours changed!!!")
+    return redirect(url_for('views.adminhome'))

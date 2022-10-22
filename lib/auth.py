@@ -10,6 +10,7 @@ DB_PASS = "admin"
 db_obj = DB(DB_USER, DB_PASS, DB_NAME)
 
 
+#Login page
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     # Check if "username" and "password" POST requests exist (user submitted form)
@@ -57,10 +58,6 @@ def login():
 def logout():
     # Remove session data, this will log the user out
     session.clear()
-    if 'loggedin' in session:
-        print("logged in even after clicking logout")
-    else:
-        print("locked out")
     return redirect(url_for('auth.login'))
 
 

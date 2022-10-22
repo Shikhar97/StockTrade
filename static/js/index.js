@@ -5,42 +5,36 @@ function yesnoCheck() {
 
 }
 
-function refreshTable(){
+
+ function refreshTable(){
         $.ajax({
             url: '/update_price',
             type: 'GET',
             dataType: 'json',
             success: function(response) {
                 $('#refresh').html(response.html_response);
+            },
+            complete:function(response){
+                setTimeout(refreshTable,10000);
             }
         });
     }
-
 function checkmarket(){
         $.ajax({
             url: '/markettimecheck',
             type: 'GET',
             dataType: 'json',
             success: function(response) {
-                console.log(response)
-            }
+                $('#refresh').html(response.time_response);
+            },
+        complete:function(response){
+            setTimeout(checkmarket,10000);
+           }
         });
-    }
+}
 
 $(document).ready(function () {
-    $('.editstock').click(function(){
-              var stock_id = $(this).data('id');
-              $.ajax({
-                url: '/edit/stock_id',
-                type: 'post',
-                data: {id: stock_id},
-                success: function(data){
-                    $('.modal-body').html(data);
-                    $('.modal-body').append(data.htmlresponse);
-                    $('#empModal').modal('show');
-                }
-            });
-          });
+    
     $('.userinfo').click(function () {
         var stock_id = $(this).data('id');
         $.ajax({
@@ -55,9 +49,14 @@ $(document).ready(function () {
         });
     });
 
+   
 
 
 
-    setInterval(refreshTable, 5000);
-    setInterval(checkmarket, 5000);
+
+    // setInterval(refreshTable, 10000);
+    // setInterval(checkmarket, 60000);
+    setTimeout(checkmarket,2000);
+    setTimeout(refreshTable,10000);
+    
 });

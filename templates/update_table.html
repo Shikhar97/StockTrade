@@ -1,41 +1,78 @@
-{% if rows %}
-<table class="table mb-0 " id="table-to-refresh">
-    <thead>
+
+
+<table class="table mb-0" id="refresh">
+  <thead>
     <tr>
-        <th scope="col">Stock</th>
-        <th scope="col">Current Price</th>
-        <th scope="col">Day High</th>
-        <th scope="col">Day Low</th>
-        <th scope="col">Open Price</th>
-        <th scope="col">Closing Price</th>
-        <th scope="col">Volume</th>
-        <th scope="col">Market Cap.</th>
-        <th scope="col"></th>
-
+      <th scope="col">Stock</th>
+      <th scope="col">Current Price</th>
+      <th scope="col">Day High</th>
+      <th scope="col">Day Low</th>
+      <th scope="col">Open Price</th>
+      <th scope="col">Closing Price</th>
+      <th scope="col">Volume</th>
+      <th scope="col">Market Cap.</th>
+      <th scope="col"></th>
     </tr>
-    </thead>
-    <tbody>
+  </thead>
+  <tbody>
+    {% if rows %}
     {% for row in rows %}
-        <tr>
-            <td>
-                {{ row.stock_name }}
-            </td>
-            <td>{{ row.curr_price }}</td>
-            <td>{{ row.day_high }}</td>
-            <td>{{ row.day_low }}</td>
-            <td>{{ row.open_price }}</td>
-            <td>{{ row.close_price }}</td>
-            <td>{{ row.volume}}</td>
-            <td>{{ row.mark_cap }}</td>
+    <tr>
+      <td>{{ row.stock_name }}</td>
+      <td>{{ row.curr_price }}</td>
+      <td>{{ row.day_high }}</td>
+      <td>{{ row.day_low }}</td>
+      <td>{{ row.open_price }}</td>
+      <td>{{ row.close_price }}</td>
+      <td>{{ row.volume }}</td>
+      <td>{{ row.mark_cap}}</td>
 
-            <td>
-                <button style="padding: 0px; height: 30px; width: 100px;" data-id='{{ row.id }}' class="userinfo btn btn-dark ms-3">
-                    Buy/Sell
-                </button>
-            </td>
+      {% if disable %}
+      <td>
+        <button
+          style="padding: 0px; height: 30px; width: 100px"
+          data-id="{{ row.id }}"
+          class="userinfo btn btn-dark ms-3"
+          disabled
+        >
+          Buy/Sell
+        </button>
+      </td>
 
-        </tr>
+      {% else %}
+      <td>
+        <button
+          style="padding: 0px; height: 30px; width: 100px"
+          data-id="{{ row.id }}"
+          class="userinfo btn btn-dark ms-3"
+        >
+          Buy/Sell
+        </button>
+      </td>
+
+      {% endif %}
+    </tr>
     {% endfor %}
-    </tbody>
+  </tbody>
 </table>
+
 {% endif %}
+
+
+
+<div class="modal fade" id="empModal" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h3 class="modal-title text-start text-dark">Buy/Sell</h3>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body"></div>
+      </div>
+    </div>
+  </div>
