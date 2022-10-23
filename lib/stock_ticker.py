@@ -3,6 +3,8 @@ from stocksymbol import StockSymbol
 from datetime import datetime as date
 from apscheduler.schedulers.background import BackgroundScheduler
 
+from lib.db import DB
+
 
 def get_price(init_value, change_factor=0.007):
     return float("{:.2f}".format(
@@ -127,15 +129,18 @@ class StockList:
             output = self.db.run_query(stock_data, p_d["stock_id"])
             if output[0]["curr_price"] >= p_d["limit_price"] and not p_d["triggered"]:
                 self.db.run_query("UPDATE pending_orders SET triggered=True WHERE order_id=%s", p_d["order_id"])
+        print("Triggered pending orders")
 
     def update_market_open_price(self):
         update_query = "UPDATE stocks SET open_price=%s WHERE id=%s"
         stocks_data = "SELECT * FROM stocks"
         for stock in self.db.run_query(stocks_data):
             self.db.run_query(update_query, stock["curr_price"], stock["id"])
+        print("Update Open price")
 
     def update_market_close_price(self):
         update_query = "UPDATE stocks SET close_price=%s WHERE id=%s"
         stocks_data = "SELECT * FROM stocks"
         for stock in self.db.run_query(stocks_data):
             self.db.run_query(update_query, stock["curr_price"], stock["id"])
+        print("Updated Close price")

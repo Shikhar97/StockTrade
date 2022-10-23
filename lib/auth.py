@@ -69,32 +69,31 @@ def sign_up():
 
         # Check if account exists using MySQL
         usercheck = config.db_obj.run_query('SELECT * FROM users WHERE email = %s', email)
-        admincheck = config.db_obj.run_query('SELECT * FROM admin_users WHERE email = %s', email)
-        print(usercheck, admincheck)
-        if usercheck:
+        admincheck = config.db_obj.run_query('SELECT * FROM admin_users WHERE email = %s', email)        
+        
+        if len(usercheck):
             flash('User already exists.', category='error')
-        elif admincheck:
+        elif len(admincheck):
             flash('Admin already registered.', category='error')
         elif len(email) < 4:
             flash('Email must be greater than 3 characters.', category='error')
-        if len(name) < 2:
+        elif len(name) < 2:
             flash('First name must be greater than 1 character.', category='error')
         elif password1 != password2:
             flash('Passwords don\'t match.', category='error')
         elif len(password1) < 7:
             flash('Password must be at least 7 characters.', category='error')
-        else:
-            if (account_type == "User"):
-                # Account doesn't exist and the form data is valid, now insert new account into users table
-                config.db_obj.run_query("INSERT INTO users (username, password, email) VALUES (%s,%s,%s)",
+        elif (account_type == "User"):
+            # Account doesn't exist and the form data is valid, now insert new account into users table
+            config.db_obj.run_query("INSERT INTO users (username, password, email) VALUES (%s,%s,%s)",
                                         name, _hashed_password, email)
-                flash('You have successfully registered!', category='success')
-                return redirect(url_for('views.home'))
-            else:
-                config.db_obj.run_query("INSERT INTO admin_users (username, password, email) VALUES (%s,%s,%s)",
+            flash('You have successfully registered!', category='success')
+            return redirect(url_for('views.home'))
+        elif (account_type == "Admin"):
+            config.db_obj.run_query("INSERT INTO admin_users (username, password, email) VALUES (%s,%s,%s)",
                                         name, _hashed_password, email)
-                flash('You have successfully registered!', category='success')
-                return redirect(url_for('views.adminhome'))
+            flash('You have successfully registered!', category='success')
+            return redirect(url_for('views.adminhome'))
 
     return render_template("sign_up.html")
 

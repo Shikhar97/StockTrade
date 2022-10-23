@@ -2,6 +2,7 @@
     <thead>
     <tr>
         <th scope="col">Stock</th>
+        <th scope="col"></th>
         <th scope="col">Current Price</th>
         <th scope="col">Day High</th>
         <th scope="col">Day Low</th>
@@ -26,6 +27,7 @@
                                             </span>
                     {% endif %}
                 </td>
+                <td>{{ row.curr_price }}</td>
                 <td>{{ row.day_high }}</td>
                 <td>{{ row.day_low }}</td>
                 <td>{{ row.open_price }}</td>

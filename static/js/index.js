@@ -70,6 +70,6 @@ $(document).ready(function () {
 
     });
 
-    setTimeout(refreshTable, 30000);
+    setTimeout(refreshTable, 10000);
 
 });

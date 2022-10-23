@@ -17,6 +17,8 @@ RUN    /etc/init.d/postgresql start &&\
 
 RUN echo "listen_addresses='*'" >> /etc/postgresql/12/main/postgresql.conf
 
+USER root
+
 #Setting up the root directory
 WORKDIR /stock_trade
 COPY requirements.txt requirements.txt
@@ -31,11 +33,9 @@ COPY config config
 COPY templates templates
 COPY main.py main.py
 
-#Exposing flask server port for web access
-EXPOSE 5000
-
 #Setting the environment PYTHONPATH
 ENV PYTHONPATH=/stock_trade
+ENV PGPASSWORD=admin
 
 # Set the default command to run when starting the container
 CMD ["/bin/bash", "-c", "service postgresql start; psql -f config/init_db.sql -U admin stock_trade; python3 main.py"]

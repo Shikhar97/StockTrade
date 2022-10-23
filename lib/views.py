@@ -17,14 +17,14 @@ def home():
                 row["arrow"] = "arrow_drop_up"
             else:
                 row["arrow"] = "arrow_drop_down"
-        return render_template("home.html", rows=rows, disable=disable)
+        return render_template("home.html", rows=rows)
     return redirect(url_for('auth.login'))
 
 
 # Admin : Create new stocks
 @views.route('/adminhome', methods=["GET", "POST"], endpoint='adminhome')
 def admin_home():
-    # Check if admin is loggedin
+    # Check if admin is logged in
     if 'loggedin' in session:
         if request.method == "POST":
             name = request.form.get('stock_name')

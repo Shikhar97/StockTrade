@@ -1,2 +1,2 @@
 docker build -t stock_trade:latest -f dockerfiles/Dockerfile .
-docker run -it --rm -p 8080:5000 stock_trade:latest
+docker run -dit --rm -p 5001:5000 stock_trade:latest
