@@ -3,8 +3,6 @@ from stocksymbol import StockSymbol
 from datetime import datetime as date
 from apscheduler.schedulers.background import BackgroundScheduler
 
-from lib.db import DB
-
 
 def get_price(init_value, change_factor=0.007):
     return float("{:.2f}".format(
