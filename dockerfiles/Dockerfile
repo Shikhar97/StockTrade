@@ -15,7 +15,6 @@ RUN    /etc/init.d/postgresql start &&\
     psql --command "CREATE USER admin WITH SUPERUSER PASSWORD 'admin';" &&\
     createdb -O admin stock_trade
 
-RUN echo "host all  all    0.0.0.0/0  trust" >> /etc/postgresql/12/main/pg_hba.conf
 RUN echo "listen_addresses='*'" >> /etc/postgresql/12/main/postgresql.conf
 
 #Setting up the root directory
@@ -25,8 +24,10 @@ RUN pip3 install --upgrade pip
 RUN pip3 install --user --no-cache-dir --upgrade -r requirements.txt
 
 #Copying all the necessary files to their respective locations
+COPY dockerfiles/pg_hba.conf /etc/postgresql/12/main/pg_hba.conf
 COPY lib lib
 COPY static static
+COPY config config
 COPY templates templates
 COPY main.py main.py
 
@@ -36,7 +37,5 @@ EXPOSE 5000
 #Setting the environment PYTHONPATH
 ENV PYTHONPATH=/stock_trade
 
-
 # Set the default command to run when starting the container
-CMD ["/usr/lib/postgresql/9.3/bin/postgres", "-D", "/var/lib/postgresql/9.3/main", "-c", "config_file=/etc/postgresql/9.3/main/postgresql.conf"]
-CMD [ "bash"]
+CMD ["/bin/bash", "-c", "service postgresql start; psql -f config/init_db.sql -U admin stock_trade; python3 main.py"]

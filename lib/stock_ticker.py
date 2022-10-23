@@ -131,11 +131,11 @@ class StockList:
     def update_market_open_price(self):
         update_query = "UPDATE stocks SET open_price=%s WHERE id=%s"
         stocks_data = "SELECT * FROM stocks"
-        for stock in self.db.run(stocks_data):
+        for stock in self.db.run_query(stocks_data):
             self.db.run_query(update_query, stock["curr_price"], stock["id"])
 
     def update_market_close_price(self):
         update_query = "UPDATE stocks SET close_price=%s WHERE id=%s"
         stocks_data = "SELECT * FROM stocks"
-        for stock in self.db.run(stocks_data):
+        for stock in self.db.run_query(stocks_data):
             self.db.run_query(update_query, stock["curr_price"], stock["id"])
