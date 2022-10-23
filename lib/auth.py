@@ -10,7 +10,7 @@ DB_PASS = "admin"
 db_obj = DB(DB_USER, DB_PASS, DB_NAME)
 
 
-#Login page
+# Login page
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     # Check if "username" and "password" POST requests exist (user submitted form)
@@ -34,7 +34,7 @@ def login():
             else:
                 # Account doesn't exist or username/password incorrect
                 flash('Incorrect username/password Please try again', category='error')
-        elif admin :
+        elif admin:
             password_rs = admin[0]['password']
             # If account exists in users table in out database
             if check_password_hash(password_rs, password):
@@ -89,18 +89,17 @@ def sign_up():
         elif len(password1) < 7:
             flash('Password must be at least 7 characters.', category='error')
         else:
-            if(account_type == "User"):
+            if (account_type == "User"):
                 # Account doesn't exist and the form data is valid, now insert new account into users table
                 db_obj.run_query("INSERT INTO users (username, password, email) VALUES (%s,%s,%s)",
-                                name, _hashed_password, email)
+                                 name, _hashed_password, email)
                 flash('You have successfully registered!', category='success')
                 return redirect(url_for('views.home'))
             else:
                 db_obj.run_query("INSERT INTO admin_users (username, password, email) VALUES (%s,%s,%s)",
-                                name, _hashed_password, email)
+                                 name, _hashed_password, email)
                 flash('You have successfully registered!', category='success')
                 return redirect(url_for('views.adminhome'))
-
 
     return render_template("sign_up.html")
 

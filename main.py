@@ -11,10 +11,7 @@ def setup_stock_updater():
     db_obj = DB("admin", "admin", "stock_trade")
     s_t = StockList(db_obj)
     s_t.initialize_db()
-    sched = BackgroundScheduler()
-    sched.add_job(s_t.update_price, 'interval', seconds=60)
-    sched.start()
-    return sched
+    s_t.schedule_jobs()
 
 
 def create_app():
@@ -32,9 +29,8 @@ def create_app():
 
 if __name__ == '__main__':
     app = create_app()
-    scheduler = setup_stock_updater()
+    setup_stock_updater()
     app.run(port=5000, debug=True)
-    scheduler.shutdown()
 
 
  
