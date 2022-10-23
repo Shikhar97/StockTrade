@@ -70,6 +70,7 @@ def sign_up():
         # Check if account exists using MySQL
         usercheck = config.db_obj.run_query('SELECT * FROM users WHERE email = %s', email)
         admincheck = config.db_obj.run_query('SELECT * FROM admin_users WHERE email = %s', email)
+        print(usercheck, admincheck)
         if usercheck:
             flash('User already exists.', category='error')
         elif admincheck:

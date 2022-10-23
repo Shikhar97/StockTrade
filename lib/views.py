@@ -23,7 +23,7 @@ def home():
 
 # Admin : Create new stocks
 @views.route('/adminhome', methods=["GET", "POST"], endpoint='adminhome')
-def adminhome():
+def admin_home():
     # Check if admin is loggedin
     if 'loggedin' in session:
         if request.method == "POST":

@@ -36,7 +36,7 @@ EXPOSE 5000
 #Setting the environment PYTHONPATH
 ENV PYTHONPATH=/stock_trade
 
-#CMD [ "python3", "main.py"]
 
 # Set the default command to run when starting the container
-#CMD ["/usr/lib/postgresql/9.3/bin/postgres", "-D", "/var/lib/postgresql/9.3/main", "-c", "config_file=/etc/postgresql/9.3/main/postgresql.conf"]
+CMD ["/usr/lib/postgresql/9.3/bin/postgres", "-D", "/var/lib/postgresql/9.3/main", "-c", "config_file=/etc/postgresql/9.3/main/postgresql.conf"]
+CMD [ "bash"]

@@ -49,7 +49,7 @@
             <div class="col mb-4">
                 <h2 class="fw-bold"><strong>Change Market Hours</strong></h2>
                 <div class="card-body text-center d-flex flex-column ">
-                    <form method="post"  action="{{url_for('views.market_hours')}}">
+                    <form method="post"  action="{{url_for('utility.market_hours')}}">
                         
                         <div class="mb-3"><select name="day" class="form-select">
                             <optgroup label="Choose day">
@@ -72,7 +72,7 @@
             <div class="col mb-4">
                 <h2 class="fw-bold"><strong>Create a new stock</strong></h2>
                 <div class="card-body text-center d-flex flex-column ">
-                    <form method="post" action="{{url_for('views.adminhome')}}">
+                    <form method="post" action="{{url_for('views.admin_home')}}">
                         <div class="mb-3"><input class="form-control" type="text" name="stock_name" placeholder="Stock Name"></div>
                         <div class="mb-3"><input class="form-control" type="text" name="stock_symbol" placeholder="Stock Symbol"></div>
                         <div class="mb-3"><input class="form-control" type="number" name="stock_price" placeholder="Initial Stock Price"></div>
