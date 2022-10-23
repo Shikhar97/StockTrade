@@ -16,7 +16,7 @@ class StockList:
         self.symbol_list_us = self.ss.get_symbol_list(index="NDX")
         self.db = db_obj
         self.sched = BackgroundScheduler()
-        self.sched.add_job(self.schedule_jobs, 'interval', seconds=5)
+        self.sched.add_job(self.schedule_jobs, 'interval', seconds=2)
         self.sched.start()
 
     def schedule_jobs(self):
@@ -31,19 +31,27 @@ class StockList:
         d3 = date.strptime(to_time, '%H:%M')
 
         # Update the close price once market is close
-        if "market_close" not in job_list:
-            run_date = date.combine(date.today(), date.time(d3))
-            self.sched.add_job(self.update_market_close_price, 'date', run_date=run_date, id="market_close")
+        if d1 > d3:
+            if "market_close" in job_list:
+                self.sched.remove_job("market_close")
+        else:
+            if "market_close" not in job_list:
+                run_date = date.combine(date.today(), date.time(d3))
+                self.sched.add_job(self.update_market_close_price, 'date', run_date=run_date, id="market_close")
 
         # Update the close price once market opens
-        if "market_open" not in job_list:
-            run_date = date.combine(date.today(), date.time(d2))
-            self.sched.add_job(self.update_market_open_price, 'date', run_date=run_date, id="market_open")
+        if d1 > d2:
+            if "market_open" in job_list:
+                self.sched.remove_job("market_open")
+        else:
+            if "market_open" not in job_list:
+                run_date = date.combine(date.today(), date.time(d2))
+                self.sched.add_job(self.update_market_open_price, 'date', run_date=run_date, id="market_open")
 
         # Update market prices
-        if d2 < d1 < d3:
+        if d2 < d1 < d3 or d2 > d1 > d3:
             if "market_update" not in job_list:
-                self.sched.add_job(self.update_price, 'interval', seconds=30, id="market_update")
+                self.sched.add_job(self.update_price, 'interval', seconds=15, id="market_update")
         else:
             if "market_update" in job_list:
                 self.sched.remove_job("market_update")
@@ -51,11 +59,8 @@ class StockList:
         if "update_pending_order" not in job_list:
             self.sched.add_job(self.update_pending_order_table, 'interval', seconds=300, id="update_pending_order")
         if "trigger_pending_orders" not in job_list:
-            self.sched.add_job(self.trigger_pending_orders, 'interval', seconds=10, id="trigger_pending_orders")
-        if d1 > d2 and "market_open" in job_list:
-            self.sched.remove_job("market_open")
-        elif d1 > d3 and "market_close" in job_list:
-            self.sched.remove_job("market_close")
+            self.sched.add_job(self.trigger_pending_orders, 'interval', seconds=2, id="trigger_pending_orders")
+        print(job_list)
 
     def initialize_db(self):
         for stock in self.symbol_list_us:

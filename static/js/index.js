@@ -6,15 +6,16 @@ function yesnoCheck() {
 }
 
 function refreshTable() {
+    // location.reload();
     $.ajax({
         url: '/update_price',
         type: 'GET',
         dataType: 'json',
         success: function (response) {
-            $('#refresh').html(response.html_response);
+            $(document).html(response.html_response);
         },
         complete: function (response) {
-            setTimeout(refreshTable, 30000);
+            setTimeout(refreshTable, 16000);
         }
     });
 }
@@ -70,6 +71,6 @@ $(document).ready(function () {
 
     });
 
-    setTimeout(refreshTable, 10000);
+    setTimeout(refreshTable, 16000);
 
 });
