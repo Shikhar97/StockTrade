@@ -117,11 +117,10 @@ def withdraw_funds():
 
 
 # User: Modal for buying/selling stocks
-@utility.route("/buysell", methods=["POST", "GET"])
-def buy_sell():
+@utility.route("/buysell/<int:stock_id>", methods=["POST", "GET"])
+def buysell(stock_id):
     stock_details = {}
     if request.method == 'POST':
-        stock_id = request.form['id']
         stock_details = config.db_obj.run_query("SELECT * FROM stocks WHERE id = %s", stock_id)
     return jsonify({'htmlresponse': render_template('response.html', stock_details=stock_details)})
 

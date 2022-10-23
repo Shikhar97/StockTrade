@@ -5,72 +5,67 @@ function yesnoCheck() {
 
 }
 
-function refreshTable() {
-    // location.reload();
+function buysell(stock_id) {
     $.ajax({
-        url: '/update_price',
+        url: '/markettimecheck',
         type: 'GET',
         dataType: 'json',
         success: function (response) {
-            $(document).html(response.html_response);
+            if (response.market_time) {
+                $.ajax({
+                    url: '/buysell/'+ stock_id,
+                    type: 'POST',
+                    // data: {stock_id: stock_id},
+                    success: function (data) {
+                        $('.modal-body').html(data);
+                        $('.modal-body').append(data.htmlresponse);
+                        $('#empModal').modal('show');
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: 'Market Closed!',
+                    html: 'Cannot place orders',
+                    timer: 2000,
+                    timerProgressBar: true,
+                });
+            }
         },
-        complete: function (response) {
-            setTimeout(refreshTable, 16000);
-        }
     });
+
 }
-
-
-$(document).ready(function () {
-    $('.cancelorder').click(function () {
+$('.cancelorder').click(function () {
         var order_id = $(this).data('id');
         $.ajax({
             url: '/cancelorder',
-            type: 'post',
+            type: 'POST',
             data: {order_id: order_id},
             success: function (data) {
                 console.log("Order canceled");
                 Swal.fire({
-                        title: 'Order Cancelled',
-                        html: '',
-                        timer: 1000
-                    });
+                    title: 'Order Cancelled',
+                    html: '',
+                    timer: 1000
+                });
             }
         });
 
     });
 
-    $('.buysell').click(function () {
-        var stock_id = $(this).data('id');
-        $.ajax({
-            url: '/markettimecheck',
-            type: 'GET',
-            dataType: 'json',
-            success: function (response) {
-                if (response.market_time) {
-                    $.ajax({
-                        url: '/buysell',
-                        type: 'post',
-                        data: {id: stock_id},
-                        success: function (data) {
-                            $('.modal-body').html(data);
-                            $('.modal-body').append(data.htmlresponse);
-                            $('#empModal').modal('show');
-                        }
-                    });
-                } else {
-                    Swal.fire({
-                        title: 'Market Closed!',
-                        html: 'Cannot place orders',
-                        timer: 2000,
-                        timerProgressBar: true,
-                    });
-                }
-            },
-        });
-
+function refreshTable() {
+    $.ajax({
+        url: '/update_price',
+        type: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            $("#refresh").html(response.html_response);
+        },
+        complete: function (response) {
+            setTimeout(refreshTable, 5000);
+        }
     });
+}
 
-    setTimeout(refreshTable, 16000);
-
+$(document).ready(function () {
+    setTimeout(refreshTable, 5000);
 });

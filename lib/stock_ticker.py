@@ -4,6 +4,7 @@ from datetime import datetime as date
 from apscheduler.schedulers.background import BackgroundScheduler
 
 
+# To calculate the delta for stock price
 def get_price(init_value, change_factor=0.007):
     return float("{:.2f}".format(
         init_value + change_factor * random.randint(int(((init_value + 1) / 2) * -1), int((init_value + 1) / 2))))
@@ -12,13 +13,16 @@ def get_price(init_value, change_factor=0.007):
 class StockList:
     def __init__(self, db_obj):
         self.api_key = 'ab43c7ee-4009-4e4f-83a4-cf41c59dd486'
+        # Getting the list of 100 stocks and randomly initialize the values of the stocks
         self.ss = StockSymbol(self.api_key)
         self.symbol_list_us = self.ss.get_symbol_list(index="NDX")
         self.db = db_obj
+        # Adding the price update task to run in the background
         self.sched = BackgroundScheduler()
         self.sched.add_job(self.schedule_jobs, 'interval', seconds=2)
         self.sched.start()
 
+    # Wrapper scheduler function for scheduling the background tasks
     def schedule_jobs(self):
         job_list = [job.id for job in self.sched.get_jobs()]
         today_day = date.today().strftime("%A")
@@ -48,7 +52,7 @@ class StockList:
                 run_date = date.combine(date.today(), date.time(d2))
                 self.sched.add_job(self.update_market_open_price, 'date', run_date=run_date, id="market_open")
 
-        # Update market prices
+        # Update market prices every 15 seconds
         if d2 < d1 < d3 or d2 > d1 > d3:
             if "market_update" not in job_list:
                 self.sched.add_job(self.update_price, 'interval', seconds=15, id="market_update")
@@ -56,12 +60,16 @@ class StockList:
             if "market_update" in job_list:
                 self.sched.remove_job("market_update")
 
+        # Update pending orders every 5 minutes
         if "update_pending_order" not in job_list:
             self.sched.add_job(self.update_pending_order_table, 'interval', seconds=300, id="update_pending_order")
+
+        # Check and trigger pending orders every 2 seconds
         if "trigger_pending_orders" not in job_list:
             self.sched.add_job(self.trigger_pending_orders, 'interval', seconds=2, id="trigger_pending_orders")
         print(job_list)
 
+    # Initialize db with stocks and their prices
     def initialize_db(self):
         for stock in self.symbol_list_us:
             try:
@@ -77,6 +85,7 @@ class StockList:
                 if "already exists" in str(e):
                     pass
 
+    # Function to update the price, day_high, day_low, etc.
     def update_price(self):
         # Updating the price of stocks during market hours
         get_query = "SELECT symbol, curr_price, day_high, day_low, volume FROM stocks"
@@ -95,6 +104,7 @@ class StockList:
             self.db.run_query(update_query, stock["curr_price"], float(updated_price), float(updated_low),
                               float(updated_high), float("%.2f" % (updated_price * volume)), stock["symbol"])
 
+    # Function to update the pending orders
     def update_pending_order_table(self):
         clean_orders = []
         # Checking pending orders
@@ -125,6 +135,7 @@ class StockList:
             self.db.run_query(del_query, o_id)
         print("Cleaned pending orders")
 
+    # Function to trigger pending limit order if the price matches the current order
     def trigger_pending_orders(self):
         get_query = "SELECT * FROM pending_orders"
         stock_data = "SELECT * FROM stocks WHERE id=%s"
@@ -134,6 +145,7 @@ class StockList:
                 self.db.run_query("UPDATE pending_orders SET triggered=True WHERE order_id=%s", p_d["order_id"])
         print("Triggered pending orders")
 
+    # To update the open price for each stock, executes once the market opens
     def update_market_open_price(self):
         update_query = "UPDATE stocks SET open_price=%s WHERE id=%s"
         stocks_data = "SELECT * FROM stocks"
@@ -141,6 +153,7 @@ class StockList:
             self.db.run_query(update_query, stock["curr_price"], stock["id"])
         print("Update Open price")
 
+    # To update the close price for each stock, executes once the market closes
     def update_market_close_price(self):
         update_query = "UPDATE stocks SET close_price=%s WHERE id=%s"
         stocks_data = "SELECT * FROM stocks"

@@ -98,29 +98,29 @@ def sign_up():
     return render_template("sign_up.html")
 
 
-@auth.route('/admin', methods=['GET', 'POST'])
-def admin():
-    # Check if "username" and "password" POST requests exist (user submitted form)
-    if request.method == 'POST':
-        email = request.form.get('email')
-        password = request.form.get('password1')
-        user = config.db_obj.run_query('SELECT * FROM users WHERE email = %s', email)
-        # Fetch one record and return result
-        if user:
-            password_rs = user[0]['password']
-            print(password_rs)
-            # If account exists in users table in out database
-            if check_password_hash(password_rs, password):
-                # Create session data, we can access this data in other routes
-                session['loggedin'] = True
-                session['id'] = user[0]['id']
-                session['email'] = user[0]['email']
-                # Redirect to home page
-                return redirect(url_for('views.adminhome'))
-            else:
-                # Account doesn't exist or username/password incorrect
-                flash('Incorrect username/password Please try again', category='error')
-        else:
-            flash('Email does not exist!', category='error')
-
-    return render_template("admin.html")
+# @auth.route('/admin', methods=['GET', 'POST'])
+# def admin():
+#     # Check if "username" and "password" POST requests exist (user submitted form)
+#     if request.method == 'POST':
+#         email = request.form.get('email')
+#         password = request.form.get('password1')
+#         user = config.db_obj.run_query('SELECT * FROM users WHERE email = %s', email)
+#         # Fetch one record and return result
+#         if user:
+#             password_rs = user[0]['password']
+#             print(password_rs)
+#             # If account exists in users table in out database
+#             if check_password_hash(password_rs, password):
+#                 # Create session data, we can access this data in other routes
+#                 session['loggedin'] = True
+#                 session['id'] = user[0]['id']
+#                 session['email'] = user[0]['email']
+#                 # Redirect to home page
+#                 return redirect(url_for('views.adminhome'))
+#             else:
+#                 # Account doesn't exist or username/password incorrect
+#                 flash('Incorrect username/password Please try again', category='error')
+#         else:
+#             flash('Email does not exist!', category='error')
+#
+#     return render_template("admin.html")
