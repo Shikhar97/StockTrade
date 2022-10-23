@@ -123,7 +123,7 @@
             <!-- Modal body -->
             <div class="modal-body">
 
-                <form action="{{ url_for('views.addfunds') }}" method="POST">
+                <form action="{{ url_for('utility.addfunds') }}" method="POST">
                     <div class="form-group mb-3">
                         {#                        <label for="quantity">Amount</label>#}
                         <input
@@ -166,7 +166,7 @@
             <!-- Modal body -->
             <div class="modal-body">
                 <p class="text-black">Available funds to withdraw : $ {{ funds }} </p>
-                <form action="{{ url_for('views.withdrawfunds') }}" method="POST">
+                <form action="{{ url_for('utility.withdrawfunds') }}" method="POST">
                     <div class="form-group mb-3">
                         <input
                                 type="number"

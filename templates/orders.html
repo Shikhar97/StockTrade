@@ -122,7 +122,7 @@
                                     <td>{{ od.trans_type }}</td>
                                     <td>{{ od.expiry_date }}</td>
                                     <td>
-                                        <form action="{{ url_for('views.cancel_pending_order', order_id = od.order_id) }}" method="POST">
+                                        <form action="{{ url_for('utility.cancel_pending_order', order_id = od.order_id) }}" method="POST">
                                         <button type="submit" style="padding: 0px; height: 30px; width: 100px;"
                                                 data-id='{{ od.order_id }}'
                                                 class="cancelorder btn btn-dark ms-3">
