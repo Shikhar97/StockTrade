@@ -1,8 +1,7 @@
-from datetime import datetime as date
 import random
-
-from apscheduler.schedulers.background import BackgroundScheduler
 from stocksymbol import StockSymbol
+from datetime import datetime as date
+from apscheduler.schedulers.background import BackgroundScheduler
 
 
 def get_price(init_value, change_factor=0.007):
@@ -32,12 +31,14 @@ class StockList:
         d3 = date.strptime(to_time, '%H:%M')
 
         # Update the close price once market is close
-        run_date = date.combine(date.today(), date.time(d3))
-        self.sched.add_job(self.update_market_close_price, 'date', run_date=run_date, id="market_close")
+        if "market_close" not in job_list:
+            run_date = date.combine(date.today(), date.time(d3))
+            self.sched.add_job(self.update_market_close_price, 'date', run_date=run_date, id="market_close")
 
         # Update the close price once market opens
-        run_date = date.combine(date.today(), date.time(d2))
-        self.sched.add_job(self.update_market_open_price, 'date', run_date=run_date, id="market_open")
+        if "market_open" not in job_list:
+            run_date = date.combine(date.today(), date.time(d2))
+            self.sched.add_job(self.update_market_open_price, 'date', run_date=run_date, id="market_open")
 
         # Update market prices
         if d2 < d1 < d3:
@@ -55,7 +56,6 @@ class StockList:
             self.sched.remove_job("market_open")
         elif d1 > d3 and "market_close" in job_list:
             self.sched.remove_job("market_close")
-        print(job_list)
 
     def initialize_db(self):
         for stock in self.symbol_list_us:

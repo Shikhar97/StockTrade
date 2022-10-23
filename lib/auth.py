@@ -1,13 +1,7 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 from werkzeug.security import generate_password_hash, check_password_hash
-from lib.db import DB
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 
 auth = Blueprint('auth', __name__)
-
-DB_NAME = "stock_trade"
-DB_USER = "admin"
-DB_PASS = "admin"
-db_obj = DB(DB_USER, DB_PASS, DB_NAME)
 
 
 # Login page
@@ -18,8 +12,8 @@ def login():
         email = request.form.get('email')
         password = request.form['password1']
         # Check if account exists using MySQL
-        user = db_obj.run_query('SELECT * FROM users WHERE email = %s', email)
-        admin = db_obj.run_query('SELECT * FROM admin_users WHERE email = %s', email)
+        user = config.db_obj.run_query('SELECT * FROM users WHERE email = %s', email)
+        admin = config.db_obj.run_query('SELECT * FROM admin_users WHERE email = %s', email)
         # Fetch one record and return result
         if user:
             password_rs = user[0]['password']
@@ -74,8 +68,8 @@ def sign_up():
         _hashed_password = generate_password_hash(password1)
 
         # Check if account exists using MySQL
-        usercheck = db_obj.run_query('SELECT * FROM users WHERE email = %s', email)
-        admincheck = db_obj.run_query('SELECT * FROM admin_users WHERE email = %s', email)
+        usercheck = config.db_obj.run_query('SELECT * FROM users WHERE email = %s', email)
+        admincheck = config.db_obj.run_query('SELECT * FROM admin_users WHERE email = %s', email)
         if usercheck:
             flash('User already exists.', category='error')
         elif admincheck:
@@ -91,13 +85,13 @@ def sign_up():
         else:
             if (account_type == "User"):
                 # Account doesn't exist and the form data is valid, now insert new account into users table
-                db_obj.run_query("INSERT INTO users (username, password, email) VALUES (%s,%s,%s)",
-                                 name, _hashed_password, email)
+                config.db_obj.run_query("INSERT INTO users (username, password, email) VALUES (%s,%s,%s)",
+                                        name, _hashed_password, email)
                 flash('You have successfully registered!', category='success')
                 return redirect(url_for('views.home'))
             else:
-                db_obj.run_query("INSERT INTO admin_users (username, password, email) VALUES (%s,%s,%s)",
-                                 name, _hashed_password, email)
+                config.db_obj.run_query("INSERT INTO admin_users (username, password, email) VALUES (%s,%s,%s)",
+                                        name, _hashed_password, email)
                 flash('You have successfully registered!', category='success')
                 return redirect(url_for('views.adminhome'))
 
@@ -110,7 +104,7 @@ def admin():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password1')
-        user = db_obj.run_query('SELECT * FROM users WHERE email = %s', email)
+        user = config.db_obj.run_query('SELECT * FROM users WHERE email = %s', email)
         # Fetch one record and return result
         if user:
             password_rs = user[0]['password']
