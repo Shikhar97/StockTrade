@@ -4,12 +4,21 @@
 <marquee class="news-scroll fixed-bottom" behavior="scroll" direction="left" onmouseover="this.stop();"
          onmouseout="this.start();">
     {% if stock_rows %}
-        {% for row in stock_rows %}
-            <a>{{ row.symbol }} {{ row.curr_price }}</a>
-            <i class="fa-solid fa-circle fa-2xs"></i>
-            <span>&nbsp &nbsp &nbsp</span>
-        {% endfor %}
-    {% endif %}
+            {% for row in stock_rows %}
+                <a style="font-size: 25px;">
+                   {{ row.symbol }} {{ row.curr_price }}
+                        {% if row.arrow == "arrow_drop_down" %}
+                            <span style="font-size: 20px; color: red"
+                                  class="material-symbols-outlined">arrow_downward
+                                            </span>
+                        {% else %}
+                            <span style="font-size: 20px; color: green"
+                                  class="material-symbols-outlined">arrow_upward
+                    </span>
+                            </a>
+                        {% endif %}
+            {% endfor %}
+        {% endif %}
 </marquee>
 
 <section class="py-5">

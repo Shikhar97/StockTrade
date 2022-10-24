@@ -16,7 +16,9 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400&display=swap" rel="stylesheet"/>
     <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,700,0,0"/>
     <link rel="stylesheet" href="static/css/styles.css"/>
 
 </head>
@@ -48,9 +50,23 @@
                 </li>
             </ul>
         </div>
-        <form method="GET" action="{{ url_for('auth.logout') }}">
-            <input type="submit" class="btn btn-light ms-3" value="Logout"/>
-        </form>
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown"
+                    type="button">
+                Hi {{ username }}, 
+            </button>
+            <div class="dropdown-menu" style="margin:5px;">
+                <a class="dropdown-item" style="--bs-dropdown-link-hover-bg:transparent; " href="{{ url_for('auth.logout') }}">Logout</a>
+            </div>
+        </div>
+        <div class="bs-icon-xl bs-icon-circle bs-icon-primary shadow bs-icon my-4"
+             style="margin-left: 10px; background-color: black; --bs-icon-size: 20px;">
+            <svg class="bi bi-person" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor"
+                 viewBox="0 0 16 16">
+                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"></path>
+            </svg>
+        </div>
+
     </div>
 </nav>
 

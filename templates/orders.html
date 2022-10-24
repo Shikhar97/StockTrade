@@ -1,101 +1,111 @@
 {% extends "base.html" %}
 {% block content %}
-<marquee class="news-scroll fixed-bottom" behavior="scroll" direction="left" onmouseover="this.stop();"
-         onmouseout="this.start();">
-    {% if stock_rows %}
-        {% for row in stock_rows %}
-            <a>{{ row.symbol }} {{ row.curr_price }}</a>
-            <i class="fa-solid fa-circle fa-2xs"></i>
-            <span>&nbsp &nbsp &nbsp</span>
-        {% endfor %}
-    {% endif %}
-</marquee>
-<section class="py-5">
+    <marquee class="news-scroll fixed-bottom" behavior="scroll" direction="left" onmouseover="this.stop();"
+             onmouseout="this.start();">
+        {% if stock_rows %}
+            {% for row in stock_rows %}
+                <a style="font-size: 25px;">
+                   {{ row.symbol }} {{ row.curr_price }}
+                        {% if row.arrow == "arrow_drop_down" %}
+                            <span style="font-size: 20px; color: red"
+                                  class="material-symbols-outlined">arrow_downward
+                                            </span>
+                        {% else %}
+                            <span style="font-size: 20px; color: green"
+                                  class="material-symbols-outlined">arrow_upward
+                    </span>
+                            </a>
+                        {% endif %}
+            {% endfor %}
+        {% endif %}
+    </marquee>
+    <section class="py-5">
         <div class="container py-5">
             <div class="row mb-5">
                 <div class="ol-md-8 col-xl-6 text-center mx-auto">
-                <h2 class="fw-bold"><strong>Transaction History</strong></h2>
+                    <h2 class="fw-bold"><strong>Transaction History</strong></h2>
                     <div class="table-responsive bg-white" style="height:300px; overflow-y:scroll;">
-                    {% if rows %}
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th scope="col">Stock</th>
-                                <th scope="col">Volume</th>
-                                <th scope="col">Price(USD)</th>
-                                <th scope="col">Order Type</th>
-                                <th scope="col">Transaction Type</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for row in rows %}
+                        {% if rows %}
+                            <table class="table">
+                                <thead>
                                 <tr>
-                                    <td>
-                                        {{ row.symbol }}
-                                    </td>
-                                    <td>{{ row.quantity }}</td>
-                                    <td>{{ row.price }}</td>
-                                    <td>{{ row.order_type }}</td>
-                                    <td>{{ row.trans_type }}</td>
+                                    <th scope="col">Stock</th>
+                                    <th scope="col">Volume</th>
+                                    <th scope="col">Price(USD)</th>
+                                    <th scope="col">Order Type</th>
+                                    <th scope="col">Transaction Type</th>
                                 </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    {% else %}
-                        <div class="d-flex flex-column align-items-center text-black">
-                            <span class="material-symbols-outlined">analytics</span>
-                            <h2>No records found</h2>
+                                </thead>
+                                <tbody>
+                                {% for row in rows %}
+                                    <tr>
+                                        <td>
+                                            {{ row.symbol }}
+                                        </td>
+                                        <td>{{ row.quantity }}</td>
+                                        <td>{{ row.price }}</td>
+                                        <td>{{ row.order_type }}</td>
+                                        <td>{{ row.trans_type }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <div class="d-flex flex-column align-items-center text-black">
+                                <span class="material-symbols-outlined">analytics</span>
+                                <h2>No records found</h2>
 
-                        </div>
-                    {% endif %}
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="col-md-8 col-xl-6 text-center mx-auto">
-                <h2 class="fw-bold"><strong>Pending Orders(Limit Orders)</strong></h2>
+                    <h2 class="fw-bold"><strong>Pending Orders(Limit Orders)</strong></h2>
                     <div class="table-responsive bg-white" style="height:300px; overflow-y:scroll;">
-                     {% if pending_orders %}
+                        {% if pending_orders %}
 
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th scope="col">Stock</th>
-                                <th scope="col">Volume</th>
-                                <th scope="col">Price(USD)</th>
-                                <th scope="col">Transaction Type</th>
-                                <th scope="col">Order Expiry</th>
-                                <th scope="col"></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for od in pending_orders %}
+                            <table class="table">
+                                <thead>
                                 <tr>
-                                    <td>
-                                        {{ od.symbol }}
-                                    </td>
-                                    <td>{{ od.quantity }}</td>
-                                    <td>{{ od.limit_price }}</td>
-                                    <td>{{ od.trans_type }}</td>
-                                    <td>{{ od.expiry_date }}</td>
-                                    <td>
-                                        <form action="{{ url_for('utility.cancel_pending_order', order_id = od.order_id) }}" method="POST">
-                                        <button type="submit" style="padding: 0px; height: 30px; width: 100px;"
-                                                data-id='{{ od.order_id }}'
-                                                class="cancelorder btn btn-dark ms-3">
-                                            Cancel
-                                        </button>
-                                        </form>
-                                    </td>
+                                    <th scope="col">Stock</th>
+                                    <th scope="col">Volume</th>
+                                    <th scope="col">Price(USD)</th>
+                                    <th scope="col">Transaction Type</th>
+                                    <th scope="col">Order Expiry</th>
+                                    <th scope="col"></th>
                                 </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                     {% else %}
-                        <div class="d-flex flex-column align-items-center text-black">
-                            <span class="material-symbols-outlined">analytics</span>
-                            <h2>No records found</h2>
+                                </thead>
+                                <tbody>
+                                {% for od in pending_orders %}
+                                    <tr>
+                                        <td>
+                                            {{ od.symbol }}
+                                        </td>
+                                        <td>{{ od.quantity }}</td>
+                                        <td>{{ od.limit_price }}</td>
+                                        <td>{{ od.trans_type }}</td>
+                                        <td>{{ od.expiry_date }}</td>
+                                        <td>
+                                            <form action="{{ url_for('utility.cancel_pending_order', order_id = od.order_id) }}"
+                                                  method="POST">
+                                                <button type="submit" style="padding: 0px; height: 30px; width: 100px;"
+                                                        data-id='{{ od.order_id }}'
+                                                        class="cancelorder btn btn-dark ms-3">
+                                                    Cancel
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <div class="d-flex flex-column align-items-center text-black">
+                                <span class="material-symbols-outlined">analytics</span>
+                                <h2>No records found</h2>
 
-                        </div>
-                         {% endif %}
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

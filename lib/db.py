@@ -1,6 +1,6 @@
 import psycopg2
 from psycopg2 import Error, extras
-
+from retry import retry
 
 
 class DB:
@@ -32,11 +32,14 @@ class DB:
             print("Error while connecting to PostgreSQL", error)
             return None
 
+    @retry(Exception, tries=3)
     def run_query(self, query, *args):
         self.cursor.execute(query, args)
         try:
             return self.cursor.fetchall()
         except Exception as e:
+            if "SELECT" in query:
+                raise e
             return None
 
     def disconnect_db(self):
@@ -47,13 +50,3 @@ class DB:
 
     def __del__(self):
         self.disconnect_db()
-
-
-
-
-# DB_NAME = "stock_trade"
-# DB_USER = "admin"
-# DB_PASS = "admin"
-# db_obj = DB(DB_USER, DB_PASS, DB_NAME)
-# user = db_obj.run_query("SELECT * FROM users WHERE email ='sample@gmail.com'")
-# print(user["id"])

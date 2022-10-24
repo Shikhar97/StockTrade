@@ -43,7 +43,7 @@ class StockList:
                 run_date = date.combine(date.today(), date.time(d3))
                 self.sched.add_job(self.update_market_close_price, 'date', run_date=run_date, id="market_close")
 
-        # Update the close price once market opens
+        # Update the open price once market opens
         if d1 > d2:
             if "market_open" in job_list:
                 self.sched.remove_job("market_open")
