@@ -65,6 +65,9 @@ def place_orders(stock_id):
                     config.db_obj.run_query(update_fund, new_funds, session["id"])
             if order_type == "Limit":
                 order_expiry = date.strptime(request.form.get("expiry"), "%Y-%m-%d")
+                if order_expiry is None:
+                    flash("Please choose order expiry", category="error")
+                    return redirect(url_for('views.orderpage'))
                 config.db_obj.run_query(
                     "INSERT INTO pending_orders "
                     "(stock_id,user_id,order_type,quantity,limit_price,trans_type,expiry_date) "
@@ -155,7 +158,7 @@ def check_market_time():
             d1 = date.strptime(current_time, '%H:%M')
             d2 = date.strptime(from_time, '%H:%M')
             d3 = date.strptime(to_time, '%H:%M')
-            if (d2 < d1 < d3) or (d2 > d1 > d3) :
+            if (d2 <= d1 <= d3) or (d2 > d1 > d3) :
                 market_time = True
             else:
                 market_time = False
