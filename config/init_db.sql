@@ -14,6 +14,7 @@ CREATE TABLE stocks (
     stock_name VARCHAR NOT NULL ,
     day_high FLOAT DEFAULT 0.0,
     day_low FLOAT DEFAULT 0.0,
+    prev_curr_price FLOAT DEFAULT -1,
     curr_price FLOAT DEFAULT 0.0,
     open_price FLOAT DEFAULT 0.0,
     close_price FLOAT DEFAULT 0.0,
@@ -86,9 +87,9 @@ CREATE TABLE pending_orders (
 );
 
 CREATE TABLE market_hour (
-  day_name VARCHAR NOT NULL UNIQUE ,
-  to_time TIME NOT NULL ,
-  from_time TIME NOT NULL
+  day_name VARCHAR NOT NULL UNIQUE ,  
+  from_time TIME NOT NULL,
+  to_time TIME NOT NULL 
 );
 
 -- Creating Triggers
@@ -110,10 +111,10 @@ CREATE TRIGGER user_data AFTER INSERT
     EXECUTE PROCEDURE init_user();
 
 -- Initialize Market Hours
-INSERT INTO market_hour VALUES ('Monday','9:00:00', '15:00:00' );
-INSERT INTO market_hour VALUES ('Tuesday','9:00:00', '15:00:00' );
-INSERT INTO market_hour VALUES ('Wednesday','9:00:00', '15:00:00' );
-INSERT INTO market_hour VALUES ('Thursday','9:00:00', '15:00:00' );
-INSERT INTO market_hour VALUES ('Friday','9:00:00', '15:00:00' );
-INSERT INTO market_hour VALUES ('Saturday','9:00:00', '9:00:01' );
-INSERT INTO market_hour VALUES ('Sunday','9:00:00', '9:00:01' );
+INSERT INTO market_hour (day_name, to_time, from_time) VALUES ('Monday','15:00:00', '9:00:00');
+INSERT INTO market_hour (day_name, to_time, from_time) VALUES ('Tuesday','15:00:00', '9:00:00');
+INSERT INTO market_hour (day_name, to_time, from_time) VALUES ('Wednesday','15:00:00', '9:00:00');
+INSERT INTO market_hour (day_name, to_time, from_time) VALUES ('Thursday','15:00:00', '9:00:00');
+INSERT INTO market_hour (day_name, to_time, from_time) VALUES ('Friday','15:00:00', '9:00:00');
+INSERT INTO market_hour (day_name, to_time, from_time) VALUES ('Saturday', '9:00:01', '9:00:00');
+INSERT INTO market_hour (day_name, to_time, from_time) VALUES ('Sunday', '9:00:01', '9:00:00');

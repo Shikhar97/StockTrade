@@ -1,41 +1,59 @@
 {% if rows %}
-<table class="table mb-0 " id="table-to-refresh">
-    <thead>
-    <tr>
-        <th scope="col">Stock</th>
-        <th scope="col">Current Price</th>
-        <th scope="col">Day High</th>
-        <th scope="col">Day Low</th>
-        <th scope="col">Open Price</th>
-        <th scope="col">Closing Price</th>
-        <th scope="col">Volume</th>
-        <th scope="col">Market Cap.</th>
-        <th scope="col"></th>
-
-    </tr>
-    </thead>
-    <tbody>
-    {% for row in rows %}
+    <table class="table mb-0">
+        <thead>
         <tr>
-            <td>
-                {{ row.stock_name }}
-            </td>
-            <td>{{ row.curr_price }}</td>
-            <td>{{ row.day_high }}</td>
-            <td>{{ row.day_low }}</td>
-            <td>{{ row.open_price }}</td>
-            <td>{{ row.close_price }}</td>
-            <td>{{ row.volume}}</td>
-            <td>{{ row.mark_cap }}</td>
-
-            <td>
-                <button style="padding: 0px; height: 30px; width: 100px;" data-id='{{ row.id }}' class="userinfo btn btn-dark ms-3">
-                    Buy/Sell
-                </button>
-            </td>
-
+            <th scope="col">Stock</th>
+            <th scope="col"></th>
+            <th scope="col">Current Price</th>
+            <th scope="col">Day High</th>
+            <th scope="col">Day Low</th>
+            <th scope="col">Open Price</th>
+            <th scope="col">Closing Price</th>
+            <th scope="col">Volume</th>
+            <th scope="col">Market Cap.</th>
+            <th scope="col"></th>
         </tr>
-    {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        {% for row in rows %}
+            <tr>
+                <td>{{ row.stock_name }}</td>
+                <td>
+                    {% if row.arrow == "arrow_drop_down" %}
+                        <span style="font-size: 30px; color: red"
+                              class="material-symbols-outlined">{{ row.arrow }}
+                                            </span>
+                    {% else %}
+                        <span style="font-size: 30px; color: green"
+                              class="material-symbols-outlined">{{ row.arrow }}
+                                            </span>
+                    {% endif %}
+                </td>
+                <td>{{ row.curr_price }}
+                </td>
+                <td>{{ row.day_high }}</td>
+                <td>{{ row.day_low }}</td>
+                <td>{{ row.open_price }}</td>
+                <td>{{ row.close_price }}</td>
+                <td>{{ row.volume }}</td>
+                <td>{{ row.mark_cap }}</td>
+                <td>
+                    <button style="padding: 0px; height: 30px; width: 100px;"
+                            id="{{ row.id }}"
+                            data-id="{{ row.id }}"
+                            class="buysell btn btn-dark ms-3"
+                            onclick="buysell(this.id);">
+                        Buy/Sell
+                    </button>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <div class="d-flex flex-column align-items-center text-black">
+        <span class="material-symbols-outlined">analytics</span>
+        <h2>No records found</h2>
+
+    </div>
 {% endif %}

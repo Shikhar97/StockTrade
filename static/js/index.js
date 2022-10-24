@@ -5,59 +5,67 @@ function yesnoCheck() {
 
 }
 
-function refreshTable(){
-        $.ajax({
-            url: '/update_price',
-            type: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                $('#refresh').html(response.html_response);
+function buysell(stock_id) {
+    $.ajax({
+        url: '/markettimecheck',
+        type: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            if (response.market_time) {
+                $.ajax({
+                    url: '/buysell/'+ stock_id,
+                    type: 'POST',
+                    // data: {stock_id: stock_id},
+                    success: function (data) {
+                        $('.modal-body').html(data);
+                        $('.modal-body').append(data.htmlresponse);
+                        $('#empModal').modal('show');
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: 'Market Closed!',
+                    html: 'Cannot place orders',
+                    timer: 2000,
+                    timerProgressBar: true,
+                });
             }
-        });
-    }
-
-function checkmarket(){
-        $.ajax({
-            url: '/markettimecheck',
-            type: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                console.log(response)
-            }
-        });
-    }
-
-$(document).ready(function () {
-    $('.editstock').click(function(){
-              var stock_id = $(this).data('id');
-              $.ajax({
-                url: '/edit/stock_id',
-                type: 'post',
-                data: {id: stock_id},
-                success: function(data){
-                    $('.modal-body').html(data);
-                    $('.modal-body').append(data.htmlresponse);
-                    $('#empModal').modal('show');
-                }
-            });
-          });
-    $('.userinfo').click(function () {
-        var stock_id = $(this).data('id');
-        $.ajax({
-            url: '/buysell',
-            type: 'post',
-            data: {id: stock_id},
-            success: function (data) {
-                $('.modal-body').html(data);
-                $('.modal-body').append(data.htmlresponse);
-                $('#empModal').modal('show');
-            }
-        });
+        },
     });
 
+}
+$('.cancelorder').click(function () {
+        var order_id = $(this).data('id');
+        $.ajax({
+            url: '/cancelorder',
+            type: 'POST',
+            data: {order_id: order_id},
+            success: function (data) {
+                console.log("Order canceled");
+                Swal.fire({
+                    title: 'Order Cancelled',
+                    html: '',
+                    timer: 1000
+                });
+            }
+        });
 
+    });
 
+function refreshTable() {
+    $.ajax({
+        url: '/update_price',
+        type: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            $("#refresh").html(response.html_response);
+        },
+        complete: function (response) {
+            setTimeout(refreshTable, 5000);
+        }
+    });
+}
 
-    setInterval(refreshTable, 5000);
-    setInterval(checkmarket, 5000);
+$(document).ready(function () {
+    setTimeout(refreshTable, 5000);
 });

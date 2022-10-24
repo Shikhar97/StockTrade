@@ -2,7 +2,11 @@ Flask==2.2.2
 flask_bootstrap==3.3.7.1
 flask_wtf==1.0.1
 WTForms==3.0.1
+psycopg2-binary==2.9.4
 psycopg2~=2.9.4
 stocksymbol~=0.0.5
 APScheduler==3.9.1
 Werkzeug~=2.2.2
+flask-session==0.4.0
+requests==2.28.1
+retry~=0.9.2

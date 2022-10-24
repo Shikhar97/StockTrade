@@ -1,14 +1,36 @@
-{% extends "base.html" %}
-{% block title %}Login{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
+    <title>{% block title %}StockTrade{% endblock %}</title>
 
-{% block content %}
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Inter:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&amp;display=swap">
+    <link rel="stylesheet" href="static/css/fontawesome.css"/>
+    <link rel="stylesheet" href="static/css/brands.css"/>
+    <link rel="stylesheet" href="static/css/solid.css"/>
+
+    <link rel="stylesheet" href="static/css/styles.css"/>
+    <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
+    <script src="static/js/script.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.1/dist/sweetalert2.all.min.js"></script>
+    <script src="static/js/index.js"></script>
+
+</head>
+<body style="padding: 0px">
+<div class="container">
+    {% include "sweetalert.html" %}
+
     <section class="py-5">
         <div class="container py-5">
             <div class="row mb-4 mb-lg-5">
                 <div class="col-md-8 col-xl-6 text-center mx-auto">
                     <h2 class="fw-bold text-success mb-2">Login</h2>
-                    <h2 class="fw-bold">Welcome back</h2>
+                    <h2 class="fw-bold">Welcome back!</h2>
                 </div>
             </div>
             <div class="row d-flex justify-content-center">
@@ -16,9 +38,13 @@
                     <div class="card">
                         <div class="card-body text-center d-flex flex-column align-items-center">
                             <form method="post">
-                                <div class="mb-3"><input class="form-control" type="email" name="email" placeholder="Email"></div>
-                                <div class="mb-3"><input class="form-control" type="password" name="password1" id="passwrod1" placeholder="Password"></div>
-                                <div class="mb-3"><button class="btn btn-primary shadow d-block w-100" type="submit">Log in</button></div>
+                                <div class="mb-3"><input class="form-control" type="email" name="email"
+                                                         placeholder="Email"></div>
+                                <div class="mb-3"><input class="form-control" type="password" name="password1"
+                                                         id="passwrod1" placeholder="Password"></div>
+                                <div class="mb-3">
+                                    <button class="btn btn-primary shadow d-block w-100" type="submit">Log in</button>
+                                </div>
                                 <p class="text-muted">New user? <a href="{{ url_for('auth.sign_up') }}">Register</a></p>
                             </form>
                         </div>
@@ -27,5 +53,6 @@
             </div>
         </div>
     </section>
-
-{% endblock %}
+</div>
+</body>
+</html>
