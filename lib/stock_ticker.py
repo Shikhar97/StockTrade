@@ -67,7 +67,6 @@ class StockList:
         # Check and trigger pending orders every 2 seconds
         if "trigger_pending_orders" not in job_list:
             self.sched.add_job(self.trigger_pending_orders, 'interval', seconds=2, id="trigger_pending_orders")
-        print(job_list)
 
     # Initialize db with stocks and their prices
     def initialize_db(self):
