@@ -19,7 +19,7 @@ class StockList:
         self.db = db_obj
         # Adding the price update task to run in the background
         self.sched = BackgroundScheduler()
-        self.sched.add_job(self.schedule_jobs, 'interval', seconds=2)
+        self.sched.add_job(self.schedule_jobs, 'interval', seconds=59)
         self.sched.start()
 
     # Wrapper scheduler function for scheduling the background tasks
@@ -42,6 +42,11 @@ class StockList:
             if "market_close" not in job_list:
                 run_date = date.combine(date.today(), date.time(d3))
                 self.sched.add_job(self.update_market_close_price, 'date', run_date=run_date, id="market_close")
+            else:
+                self.sched.remove_job("market_close")
+                run_date = date.combine(date.today(), date.time(d3))
+                self.sched.add_job(self.update_market_close_price, 'date', run_date=run_date, id="market_close")
+
 
         # Update the open price once market opens
         if d1 > d2:
@@ -51,22 +56,27 @@ class StockList:
             if "market_open" not in job_list:
                 run_date = date.combine(date.today(), date.time(d2))
                 self.sched.add_job(self.update_market_open_price, 'date', run_date=run_date, id="market_open")
+            else:
+                self.sched.remove_job("market_open")
+                run_date = date.combine(date.today(), date.time(d2))
+                self.sched.add_job(self.update_market_open_price, 'date', run_date=run_date, id="market_open")
 
         # Update market prices every 15 seconds
-        if d2 < d1 < d3 or d2 > d1 > d3:
-            if "market_update" not in job_list:
-                self.sched.add_job(self.update_price, 'interval', seconds=15, id="market_update")
-        else:
-            if "market_update" in job_list:
-                self.sched.remove_job("market_update")
+        # if d2 <= d1 <= d3:
+        #     if "market_update" not in job_list:
+        #         self.sched.add_job(self.update_price, 'interval', seconds=13, id="market_update")
+        # else:
+        #     if "market_update" in job_list:
+        #         self.sched.remove_job("market_update")
 
-        # Update pending orders every 5 minutes
+        # Update pending orders every 31 seconds
         if "update_pending_order" not in job_list:
-            self.sched.add_job(self.update_pending_order_table, 'interval', seconds=300, id="update_pending_order")
+            self.sched.add_job(self.update_pending_order_table, 'interval', seconds=5, id="update_pending_order")
 
         # Check and trigger pending orders every 2 seconds
-        if "trigger_pending_orders" not in job_list:
-            self.sched.add_job(self.trigger_pending_orders, 'interval', seconds=2, id="trigger_pending_orders")
+        # if "trigger_pending_orders" not in job_list:
+        #     self.sched.add_job(self.trigger_pending_orders, 'interval', seconds=14, id="trigger_pending_orders")
+        print(job_list)
 
     # Initialize db with stocks and their prices
     def initialize_db(self):
@@ -89,6 +99,8 @@ class StockList:
         # Updating the price of stocks during market hours
         get_query = "SELECT symbol, curr_price, day_high, day_low, volume FROM stocks"
         output = self.db.run_query(get_query)
+        print("Stock price")
+        print(output)
         for stock in output:
             updated_price = get_price(stock["curr_price"])
             updated_high, updated_low = stock["day_high"], stock["day_low"]
@@ -120,17 +132,19 @@ class StockList:
                     "VALUES (%s,%s,%s,%s,%s,%s)",
                     order["stock_id"], order["user_id"], order["quantity"], order["limit_price"], order["trans_type"],
                     order["order_type"])
-            elif date.now() > expiry_date and order["triggered"] is False:
+            elif date.now() > date.strptime(expiry_date.strftime("%Y-%m-%d"), "%Y-%m-%d") and \
+                    order["triggered"] is False:
                 clean_orders.append(order["order_id"])
         # Updating the user funds
         # Deleting expired orders which are not triggered
         for o_id in clean_orders:
             get_query = "SELECT * FROM pending_orders WHERE order_id=%s"
             output = self.db.run_query(get_query, o_id)
-            user_data = self.db.run_query('SELECT * FROM user_portfolio WHERE user_id=%s', output["user_id"])
-            new_funds = user_data[0]["funds"] + output["price"] * output["quantity"]
+            print(output)
+            user_data = self.db.run_query('SELECT * FROM user_portfolio WHERE user_id=%s', output[0]["user_id"])
+            new_funds = user_data[0]["funds"] + output[0]["limit_price"] * output[0]["quantity"]
             update_fund = "UPDATE user_portfolio SET funds=%s WHERE user_id=%s"
-            self.db.run_query(update_fund, new_funds, output["user_id"])
+            self.db.run_query(update_fund, new_funds, output[0]["user_id"])
             self.db.run_query(del_query, o_id)
         print("Cleaned pending orders")
 
@@ -140,8 +154,13 @@ class StockList:
         stock_data = "SELECT * FROM stocks WHERE id=%s"
         for p_d in self.db.run_query(get_query):
             output = self.db.run_query(stock_data, p_d["stock_id"])
-            if output[0]["curr_price"] >= p_d["limit_price"] and not p_d["triggered"]:
-                self.db.run_query("UPDATE pending_orders SET triggered=True WHERE order_id=%s", p_d["order_id"])
+            print(output)
+            if p_d["trans_type"].lower() == "sell":
+                if output[0]["curr_price"] >= p_d["limit_price"] and not p_d["triggered"]:
+                    self.db.run_query("UPDATE pending_orders SET triggered=True WHERE order_id=%s", p_d["order_id"])
+            elif p_d["trans_type"].lower() == "buy":
+                if output[0]["curr_price"] <= p_d["limit_price"] and not p_d["triggered"]:
+                    self.db.run_query("UPDATE pending_orders SET triggered=True WHERE order_id=%s", p_d["order_id"])
         print("Triggered pending orders")
 
     # To update the open price for each stock, executes once the market opens

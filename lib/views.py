@@ -69,7 +69,7 @@ def portfolio():
             value = config.db_obj.run_query("SELECT curr_price FROM stocks WHERE symbol=%s", user_stock["symbol"])
             current_value += value[0]["curr_price"] * user_stock["stock_count"]
         return render_template("portfolio.html", funds=round(fund[0]["funds"], 2), stock_rows=stock_rows,
-                               invested_value=fund[0]["invested_value"], curr_value=current_value,
+                               invested_value=fund[0]["invested_value"], curr_value=float("%.2f" % current_value),
                                stock_info=stock_list_output, username=session['username'])
     return redirect(url_for('views.home'))
 
