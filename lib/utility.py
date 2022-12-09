@@ -158,7 +158,7 @@ def check_market_time():
             d1 = date.strptime(current_time, '%H:%M')
             d2 = date.strptime(from_time, '%H:%M')
             d3 = date.strptime(to_time, '%H:%M')
-            if (d2 <= d1 <= d3) or (d2 > d1 > d3) :
+            if d2 <= d1 <= d3:
                 market_time = True
             else:
                 market_time = False

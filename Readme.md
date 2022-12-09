@@ -24,3 +24,5 @@ Access the application at http://127.0.0.1:5001
 4. Download and Install Python from https://www.python.org/downloads/
 5. Execute _pip3 install --user -r requirements.txt_
 6. Run _python3 main.py_
+
+_**If using docker the data is not persistent so if respawned need to register users again**_
